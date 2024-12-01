@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:job_finder_app/ui/screens/splash_screen/splash_screen.dart';
-import 'package:job_finder_app/ui/utils/app_theme.dart';
+import 'package:job_finder_app/presentation/screens/common/splash_screen/splash_screen.dart';
+import 'package:job_finder_app/utils/app_theme.dart';
+
 
 void main() {
   runApp(const MyApp());

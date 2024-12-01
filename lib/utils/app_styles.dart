@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:job_finder_app/utils/app_colors.dart';
 
-import 'app_colors.dart';
 
 abstract class AppStyle {
   static const TextStyle appBarStyle = TextStyle(
