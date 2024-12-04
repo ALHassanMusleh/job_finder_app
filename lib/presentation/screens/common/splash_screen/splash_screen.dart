@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:job_finder_app/presentation/screens/common/login_screen/login_screen.dart';
+import 'package:job_finder_app/presentation/screens/common/Auth/login_screen/login_screen.dart';
 import 'package:job_finder_app/utils/app_assets.dart';
 import 'package:job_finder_app/utils/app_colors.dart';
 

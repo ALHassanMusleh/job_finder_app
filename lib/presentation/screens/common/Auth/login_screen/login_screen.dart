@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:job_finder_app/presentation/screens/common/register_screen/register_screen.dart';
+import 'package:job_finder_app/presentation/screens/common/Auth/register_screen/register_screen.dart';
 import 'package:job_finder_app/presentation/screens/common/widgets/choose_user_type_widget.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
 import 'package:job_finder_app/utils/extensions.dart';
