@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:job_finder_app/data/service/auth/auth_services.dart';
 import 'package:job_finder_app/presentation/screens/common/Auth/login_screen/login_screen.dart';
 import 'package:job_finder_app/presentation/screens/common/widgets/choose_user_type_widget.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
@@ -18,6 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isPassword = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey();
 
   void updateUserType(bool userType) {
     setState(() {
@@ -35,6 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(),
       body: Form(
+        key: formKey,
         child: Center(
           child: SingleChildScrollView(
             child: Padding(
@@ -57,7 +60,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(height: 20),
                   ChooseUserTypeWidget(
                       onUserTypeChanged:
-                      updateUserType), // Pass the callback here
+                          updateUserType), // Pass the callback here
                   const SizedBox(height: 20),
                   CustomTextField(
                     type: TextInputType.emailAddress,
@@ -93,8 +96,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 20),
                   CustomButton(
-                    title: 'LOGIN',
-                    onPressed: () {},
+                    title: 'REGISTER',
+                    onPressed: () {
+                      AuthServices.createAccount(context,
+                          email: emailController.text,
+                          password: passwordController.text,
+                          formKey: formKey);
+                    },
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -134,5 +142,3 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 }
-
-
