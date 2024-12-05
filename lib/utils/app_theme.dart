@@ -4,7 +4,7 @@ import 'app_colors.dart';
 
 abstract class AppTheme {
   static ThemeData light = ThemeData(
-    useMaterial3: false,
+    useMaterial3: true,
     scaffoldBackgroundColor: AppColors.white,
     canvasColor: AppColors.white,
     colorScheme: ColorScheme.fromSeed(
@@ -20,7 +20,7 @@ abstract class AppTheme {
       ),
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.primary,
+      // backgroundColor: AppColors.primary,
       elevation: 0,
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -38,7 +38,7 @@ abstract class AppTheme {
   );
 
   static ThemeData dark = ThemeData(
-    useMaterial3: false,
+    useMaterial3: true,
     scaffoldBackgroundColor: AppColors.bgDark,
     canvasColor: AppColors.black,
     colorScheme: ColorScheme.fromSeed(
@@ -48,7 +48,7 @@ abstract class AppTheme {
       onPrimary: AppColors.black,
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.primary,
+      // backgroundColor: AppColors.primary,
       elevation: 0,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(

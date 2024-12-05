@@ -3,6 +3,8 @@ import 'package:job_finder_app/presentation/screens/common/splash_screen/splash_
 import 'package:job_finder_app/utils/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'presentation/screens/employer/employer_profile_screen/employer_profile_screen.dart';
+import 'presentation/screens/job_seeker/job_seeker_profile_screen/job_seeker_profile_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

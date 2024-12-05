@@ -215,7 +215,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       AuthServices.signIn(context,
                           email: emailController.text,
                           password: passwordController.text,
-                          formKey: formKey);
+                          formKey: formKey,isJobSeeker: isJobSeeker
+                      );
                     },
                   ),
                   const SizedBox(height: 20),

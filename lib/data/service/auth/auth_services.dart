@@ -1,13 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:job_finder_app/presentation/screens/employer/employer_profile_screen/employer_profile_screen.dart';
 import 'package:job_finder_app/presentation/screens/home_test.dart';
+import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_profile_screen/job_seeker_profile_screen.dart';
 import 'package:job_finder_app/utils/dialog_utils.dart';
 
 abstract class AuthServices {
   static void signIn(BuildContext context,
       {required String email,
       required String password,
-      required GlobalKey<FormState> formKey}) async {
+      required GlobalKey<FormState> formKey,
+      required bool isJobSeeker}) async {
     if (!formKey.currentState!.validate()) return;
     try {
       showLoading(context);
@@ -16,7 +19,17 @@ abstract class AuthServices {
       print(userCredential.user!.uid);
       if (context.mounted) {
         hideDialog(context);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeTest()));
+        if (isJobSeeker) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const JobSeekerProfileScreen()));
+        } else {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const EmployerProfileScreen()));
+        }
       }
     } on FirebaseAuthException catch (authError) {
       if (context.mounted) {
@@ -26,11 +39,10 @@ abstract class AuthServices {
       String errorMessage = "";
       if (authError.code == 'channel-error') {
         errorMessage =
-        "${authError.message ?? "something went wrong please later"} ";
+            "${authError.message ?? "something went wrong please later"} ";
       } else {
         print(authError.code);
         errorMessage = "Wrong email or password Pleas double your creds.";
-
       }
 
       if (context.mounted) {
@@ -52,7 +64,8 @@ abstract class AuthServices {
   static void createAccount(BuildContext context,
       {required String email,
       required String password,
-      required GlobalKey<FormState> formKey}) async {
+      required GlobalKey<FormState> formKey,
+      required bool isJobSeeker}) async {
     if (!formKey.currentState!.validate()) return;
 
     try {
@@ -69,7 +82,17 @@ abstract class AuthServices {
         //     title: 'Success',
         //     body: 'Account created succesfully',
         //     posButtonTitle: 'ok');
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeTest()));
+        if (isJobSeeker) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const JobSeekerProfileScreen()));
+        } else {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const EmployerProfileScreen()));
+        }
       }
     } on FirebaseAuthException catch (authError) {
       if (context.mounted) {
