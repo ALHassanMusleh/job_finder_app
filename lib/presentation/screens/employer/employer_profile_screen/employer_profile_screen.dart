@@ -1,12 +1,21 @@
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:job_finder_app/data/service/auth/auth_services.dart';
+import 'package:job_finder_app/data/model/employer.dart';
+import 'package:job_finder_app/data/service/common_services/common_services.dart';
+import 'package:job_finder_app/data/service/employer_services/employer_services.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
+import 'package:job_finder_app/utils/dialog_utils.dart';
 import 'package:job_finder_app/utils/extensions.dart';
 import 'package:job_finder_app/utils/widgets/custom_button.dart';
 import 'package:job_finder_app/utils/widgets/custom_text_field.dart';
+import 'package:job_finder_app/utils/widgets/pick_image_widget.dart';
 
 class EmployerProfileScreen extends StatefulWidget {
   const EmployerProfileScreen({super.key});
+  // final UserCredential user;
+  static const String routeName = 'EmployerProfileScreen';
 
   @override
   State<EmployerProfileScreen> createState() => _EmployerProfileScreenState();
@@ -19,12 +28,27 @@ class _EmployerProfileScreenState extends State<EmployerProfileScreen> {
   TextEditingController addressController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey();
+  File? imageFile;
+  late UserCredential user;
+  String imageUrl = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      /// This block is called after build it is only called only once
+      emailController.text = user.user!.email!;
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    user = ModalRoute.of(context)!.settings.arguments as UserCredential;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Employer Profile'),
+        title: const Text('Employer Profile'),
       ),
       body: Form(
         key: formKey,
@@ -36,28 +60,23 @@ class _EmployerProfileScreenState extends State<EmployerProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Center(
-                    child: Stack(
-                      children: [
-                        CircleAvatar(
-                          child: Image.asset('assets/images/Icon.png'),
-                          backgroundColor: const Color(0xffF7F7FC),
-                          radius: 70,
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: -10,
-                          child: CircleAvatar(
-                            backgroundColor: const Color(0xffF7F7FC),
-                            child: IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.camera_alt,
-                                )),
-                          ),
-                        ),
-                      ],
+                  const Text(
+                    'Welcome, Employers!',
+                    style: AppStyle.titlesTextStyle,
+                  ),
+                  const SizedBox(height: 15),
+                  Text(
+                    'Upload your image or company logo',
+                    style: AppStyle.bottomSheetTitle.copyWith(
+                      fontSize: 16,
                     ),
+                  ),
+                  PickImageWidget(
+                    imageFile: imageFile,
+                    onPressed: () async {
+                      imageFile = await CommonServices.pickImage();
+                      setState(() {});
+                    },
                   ),
                   const SizedBox(height: 30),
                   CustomTextField(
@@ -68,12 +87,12 @@ class _EmployerProfileScreenState extends State<EmployerProfileScreen> {
                       }
                       return null;
                     },
-                    label: 'Name',
+                    label: 'Your Name or Company Name',
                     controller: nameController,
                   ),
                   const SizedBox(height: 30),
                   CustomTextField(
-                    // initialValue: 'hassan@gamil.com',
+                    // initialValue: widget.user.user!.email! ?? ' dhfd',
                     type: TextInputType.emailAddress,
                     validate: (text) {
                       if (text == null || text.isEmpty == true) {
@@ -84,7 +103,7 @@ class _EmployerProfileScreenState extends State<EmployerProfileScreen> {
                       }
                       return null;
                     },
-                    label: 'Email',
+                    label: 'Your Email or Company Email',
                     controller: emailController,
                   ),
                   const SizedBox(height: 30),
@@ -92,7 +111,7 @@ class _EmployerProfileScreenState extends State<EmployerProfileScreen> {
                     type: TextInputType.name,
                     validate: (text) {
                       if (text == null || text.isEmpty == true) {
-                        return "name can not be empty";
+                        return "address can not be empty";
                       }
                       return null;
                     },
@@ -100,7 +119,6 @@ class _EmployerProfileScreenState extends State<EmployerProfileScreen> {
                     controller: addressController,
                   ),
                   const SizedBox(height: 30),
-
                   Text(
                     'Select company establishment date',
                     style: AppStyle.bottomSheetTitle.copyWith(
@@ -111,8 +129,11 @@ class _EmployerProfileScreenState extends State<EmployerProfileScreen> {
                     height: 30,
                   ),
                   InkWell(
-                    onTap: () {
-                      showMyDatePicker();
+                    onTap: () async {
+                      selectedDate = await CommonServices.showMyDatePicker(
+                        context,
+                      );
+                      setState(() {});
                     },
                     child: Text(
                       selectedDate.toFormattedDate,
@@ -123,18 +144,32 @@ class _EmployerProfileScreenState extends State<EmployerProfileScreen> {
                   const SizedBox(height: 30),
                   CustomButton(
                     title: 'CONFIRM',
-                    onPressed: () {},
+                    onPressed: () {
+                      // Employer employer = Employer(
+                      //   id: user.user!.uid,
+                      //   name: nameController.text,
+                      //   email: emailController.text,
+                      //   address: addressController.text,
+                      //   image: imageFile != null
+                      //       ? await CommonServices.uploadImageToSupabase(
+                      //           imageFile: imageFile)
+                      //       : '',
+                      //   companyEstablishmentDate: selectedDate,
+                      //   isImageUploaded: imageFile != null ? true : false,
+                      // );
+                      EmployerServices.addEmployerToFireStore(
+                        context,
+                        formKey: formKey,
+                        selectedDate: selectedDate,
+                        imageFile: imageFile,
+                        addressController: addressController,
+                        emailController: emailController,
+                        nameController: nameController,
+                        id: user.user!.uid,
+                      );
+                    },
                   ),
                   const SizedBox(height: 20),
-                  // Text(
-                  //   isJobSeeker
-                  //       ? 'You selected: Job Seeker'
-                  //       : 'You selected: Employer',
-                  //   style: AppStyle.subTitlesTextStyle,
-                  // ),
-                  // const Spacer(
-                  //   flex: 6,
-                  // ),
                 ],
               ),
             ),
@@ -142,18 +177,5 @@ class _EmployerProfileScreenState extends State<EmployerProfileScreen> {
         ),
       ),
     );
-  }
-
-  void showMyDatePicker() async {
-    selectedDate = await showDatePicker(
-          context: context,
-          initialDate: selectedDate,
-          lastDate: DateTime.now(),
-          firstDate: DateTime.now().subtract(
-            const Duration(days: 7300),
-          ),
-        ) ??
-        selectedDate;
-    setState(() {});
   }
 }

@@ -9,6 +9,8 @@ import 'package:job_finder_app/utils/widgets/custom_text_field.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
+  static const String routeName = 'RegisterScreen';
+
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -114,11 +116,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
+                          Navigator.pushReplacementNamed(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoginScreen(),
-                            ),
+                            LoginScreen.routeName,
                           );
                         },
                         child: const Text('Sign In'),

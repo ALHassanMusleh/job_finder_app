@@ -19,17 +19,17 @@ abstract class AuthServices {
       print(userCredential.user!.uid);
       if (context.mounted) {
         hideDialog(context);
-        if (isJobSeeker) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const JobSeekerProfileScreen()));
-        } else {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const EmployerProfileScreen()));
-        }
+        // if (isJobSeeker) {
+        //   Navigator.pushReplacementNamed(
+        //     context,
+        //     JobSeekerProfileScreen.routeName,
+        //   );
+        // } else {
+        //   Navigator.pushReplacementNamed(
+        //     context,
+        //     EmployerProfileScreen.routeName,
+        //   );
+        // }
       }
     } on FirebaseAuthException catch (authError) {
       if (context.mounted) {
@@ -83,15 +83,19 @@ abstract class AuthServices {
         //     body: 'Account created succesfully',
         //     posButtonTitle: 'ok');
         if (isJobSeeker) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const JobSeekerProfileScreen()));
+          Navigator.pushReplacementNamed(
+            context,
+            JobSeekerProfileScreen.routeName,
+            arguments: userCredential,
+
+          );
         } else {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const EmployerProfileScreen()));
+          Navigator.pushReplacementNamed(
+            context,
+            EmployerProfileScreen.routeName,
+            arguments: userCredential,
+
+          );
         }
       }
     } on FirebaseAuthException catch (authError) {
