@@ -239,12 +239,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  Text(
-                    isJobSeeker
-                        ? 'You selected: Job Seeker'
-                        : 'You selected: Employer',
-                    style: AppStyle.subTitlesTextStyle,
-                  ),
+                  // Text(
+                  //   isJobSeeker
+                  //       ? 'You selected: Job Seeker'
+                  //       : 'You selected: Employer',
+                  //   style: AppStyle.subTitlesTextStyle,
+                  // ),
                   // const Spacer(
                   //   flex: 6,
                   // ),

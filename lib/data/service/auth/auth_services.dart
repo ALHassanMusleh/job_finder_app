@@ -1,9 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:job_finder_app/data/model/app_user.dart';
+import 'package:job_finder_app/data/model/employer.dart';
+import 'package:job_finder_app/data/model/job_seeker.dart';
+import 'package:job_finder_app/data/service/employer_services/employer_services.dart';
+import 'package:job_finder_app/data/service/job_seeker_services/job_seeker_services.dart';
+import 'package:job_finder_app/presentation/screens/common/Auth/login_screen/login_screen.dart';
+import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/employer_home_screen.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_profile_screen/employer_profile_screen.dart';
 import 'package:job_finder_app/presentation/screens/home_test.dart';
+import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_home_screen/job_seeker_home_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_profile_screen/job_seeker_profile_screen.dart';
 import 'package:job_finder_app/utils/dialog_utils.dart';
+import 'package:job_finder_app/utils/shared_pref_utils.dart';
 
 abstract class AuthServices {
   static void signIn(BuildContext context,
@@ -16,20 +25,11 @@ abstract class AuthServices {
       showLoading(context);
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+
       print(userCredential.user!.uid);
       if (context.mounted) {
         hideDialog(context);
-        // if (isJobSeeker) {
-        //   Navigator.pushReplacementNamed(
-        //     context,
-        //     JobSeekerProfileScreen.routeName,
-        //   );
-        // } else {
-        //   Navigator.pushReplacementNamed(
-        //     context,
-        //     EmployerProfileScreen.routeName,
-        //   );
-        // }
+        await checkUserRole(isJobSeeker, userCredential, context);
       }
     } on FirebaseAuthException catch (authError) {
       if (context.mounted) {
@@ -61,6 +61,67 @@ abstract class AuthServices {
     }
   }
 
+  static Future<void> checkUserRole(bool isJobSeeker,
+      UserCredential userCredential, BuildContext context) async {
+    if (isJobSeeker) {
+      dynamic jobSeeker = await JobSeekerServices.getJobSeekerFromFireStore(
+          userCredential.user!.uid);
+      if (jobSeeker == null) {
+        showMessage(
+          context,
+          title: 'Error',
+          body: 'You must chooise corect user',
+          posButtonTitle: 'ok',
+        );
+        print('not user');
+        return;
+      } else {
+        JobSeeker.currentJobSeeker = jobSeeker;
+
+        SharedPrefUtils().saveUser(
+          AppUser(
+            id: userCredential.user!.uid,
+            email: userCredential.user!.email,
+            name: JobSeeker.currentJobSeeker!.name,
+            isJobSeeker: true,
+          ),
+        );
+        Navigator.pushReplacementNamed(
+          context,
+          JobSeekerHomeScreen.routeName,
+        );
+      }
+    } else {
+      dynamic employer = await EmployerServices.getEmployerFromFireStore(
+          userCredential.user!.uid);
+      if (employer == null) {
+        showMessage(
+          context,
+          title: 'Error',
+          body: 'You must chooise corect user',
+          posButtonTitle: 'ok',
+        );
+        print('not user');
+        return;
+      } else {
+        Employer.currentEmployer = employer;
+
+        SharedPrefUtils().saveUser(
+          AppUser(
+            id: userCredential.user!.uid,
+            email: userCredential.user!.email,
+            name: Employer.currentEmployer!.name,
+            isJobSeeker: false,
+          ),
+        );
+        Navigator.pushReplacementNamed(
+          context,
+          EmployerHomeScreen.routeName,
+        );
+      }
+    }
+  }
+
   static void createAccount(BuildContext context,
       {required String email,
       required String password,
@@ -87,14 +148,12 @@ abstract class AuthServices {
             context,
             JobSeekerProfileScreen.routeName,
             arguments: userCredential,
-
           );
         } else {
           Navigator.pushReplacementNamed(
             context,
             EmployerProfileScreen.routeName,
             arguments: userCredential,
-
           );
         }
       }
@@ -134,5 +193,15 @@ abstract class AuthServices {
             posButtonTitle: 'ok');
       }
     }
+  }
+
+  static void logout(bool isJobSeekerRole, BuildContext context) {
+    if (isJobSeekerRole) {
+      JobSeeker.currentJobSeeker = null;
+    } else {
+      Employer.currentEmployer = null;
+    }
+    SharedPrefUtils.removeData();
+    Navigator.pushReplacementNamed(context, LoginScreen.routeName);
   }
 }

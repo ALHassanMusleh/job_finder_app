@@ -11,7 +11,6 @@ class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
   static const String routeName = 'RegisterScreen';
 
-
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
@@ -125,12 +124,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ],
                   ),
-                  Text(
-                    isJobSeeker
-                        ? 'You selected: Job Seeker'
-                        : 'You selected: Employer',
-                    style: AppStyle.subTitlesTextStyle,
-                  ),
+                  // Text(
+                  //   isJobSeeker
+                  //       ? 'You selected: Job Seeker'
+                  //       : 'You selected: Employer',
+                  //   style: AppStyle.subTitlesTextStyle,
+                  // ),
                   // const Spacer(
                   //   flex: 6,
                   // ),

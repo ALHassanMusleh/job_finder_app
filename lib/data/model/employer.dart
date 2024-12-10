@@ -27,7 +27,7 @@ class Employer {
     id = json['id'];
     name = json['name'];
     email = json['email'];
-    address = json['occupation'];
+    address = json['address'];
     image = json['image'];
     Timestamp timestamp = json['companyEstablishmentDate'];
     companyEstablishmentDate = timestamp.toDate();

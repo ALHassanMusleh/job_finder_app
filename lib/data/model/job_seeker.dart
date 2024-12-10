@@ -11,6 +11,8 @@ class JobSeeker {
   late bool isImageUploaded;
   static const String collectionName = 'jobSeekers';
 
+  static JobSeeker? currentJobSeeker;
+
   JobSeeker({
     required this.id,
     required this.name,
