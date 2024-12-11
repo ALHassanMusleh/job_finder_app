@@ -42,6 +42,7 @@ dependencies:
   cloud_firestore: ^5.5.1
   supabase_flutter: ^2.8.1
   shared_preferences: ^2.3.3
+  iconsax: ^0.0.8
 
 dev_dependencies:
   flutter_test:

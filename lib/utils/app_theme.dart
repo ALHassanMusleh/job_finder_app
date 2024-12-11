@@ -20,8 +20,12 @@ abstract class AppTheme {
       ),
     ),
     appBarTheme: const AppBarTheme(
-      // backgroundColor: AppColors.primary,
+      backgroundColor: AppColors.white,
       elevation: 0,
+    ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: AppColors.white,
+      indicatorColor: AppColors.primary.withOpacity(0.4),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: AppColors.white,

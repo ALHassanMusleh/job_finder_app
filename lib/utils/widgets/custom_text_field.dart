@@ -15,7 +15,7 @@ class CustomTextField extends StatelessWidget {
     this.initialValue,
     this.isSuffix = false,
   });
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final TextInputType type;
   final void Function(String)? onSubmitted;
   final void Function(String)? onChanged;
