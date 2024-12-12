@@ -2,11 +2,9 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:job_finder_app/data/model/employer.dart';
 import 'package:job_finder_app/data/service/common_services/common_services.dart';
 import 'package:job_finder_app/data/service/employer_services/employer_services.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
-import 'package:job_finder_app/utils/dialog_utils.dart';
 import 'package:job_finder_app/utils/extensions.dart';
 import 'package:job_finder_app/utils/widgets/custom_button.dart';
 import 'package:job_finder_app/utils/widgets/custom_text_field.dart';

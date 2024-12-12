@@ -1,13 +1,19 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:job_finder_app/data/service/common_services/common_services.dart';
 
 class PickImageWidget extends StatelessWidget {
   const PickImageWidget(
-      {super.key, required this.imageFile, required this.onPressed});
+      {super.key,
+      required this.imageFile,
+      required this.onPressed,
+      this.isImageUploaded = false,
+      this.imagePath});
   final File? imageFile;
   final void Function()? onPressed;
+  final bool isImageUploaded;
+  final String? imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +23,19 @@ class PickImageWidget extends StatelessWidget {
           CircleAvatar(
             backgroundColor: const Color(0xffF7F7FC),
             radius: 70,
-            child: imageFile != null
-                ? Image.file(imageFile!)
-                : Image.asset('assets/images/Icon.png'),
+            child: isImageUploaded
+                ? CachedNetworkImage(
+                    imageUrl: imagePath!,
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    width: MediaQuery.of(context).size.width * .31,
+                    height: MediaQuery.of(context).size.height * .22,
+                  )
+                : imageFile != null
+                    ? Image.file(imageFile!)
+                    : Image.asset('assets/images/Icon.png'),
           ),
           Positioned(
             bottom: 0,
