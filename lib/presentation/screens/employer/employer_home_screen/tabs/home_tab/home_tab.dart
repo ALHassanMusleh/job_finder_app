@@ -3,7 +3,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:job_finder_app/utils/app_colors.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
 import 'package:job_finder_app/utils/widgets/custom_button.dart';
-import 'package:job_finder_app/utils/widgets/custom_text_field.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
@@ -148,9 +147,10 @@ class CustomJobCard extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: AppStyle.containerDecoration,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            flex: 3,
+            flex: 2,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
               decoration: BoxDecoration(
@@ -171,7 +171,7 @@ class CustomJobCard extends StatelessWidget {
             width: 12,
           ),
           Expanded(
-            flex: 7,
+            flex: 5,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -192,6 +192,36 @@ class CustomJobCard extends StatelessWidget {
                   style: AppStyle.labelStyle,
                 ),
               ],
+            ),
+          ),
+          const SizedBox(
+            width: 12,
+          ),
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      'Active',
+                      style: TextStyle(color: AppColors.white),
+                    ),
+                    padding: EdgeInsets.all(6),
+                  ),
+                  Text(
+                    '\$1500',
+                    style: AppStyle.labelStyle.copyWith(
+                        color: AppColors.primary, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

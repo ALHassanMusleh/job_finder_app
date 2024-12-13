@@ -8,6 +8,7 @@ import 'package:job_finder_app/presentation/screens/common/Auth/login_screen/log
 import 'package:job_finder_app/presentation/screens/common/Auth/register_screen/register_screen.dart';
 import 'package:job_finder_app/presentation/screens/common/splash_screen/splash_screen.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/employer_home_screen.dart';
+import 'package:job_finder_app/presentation/screens/employer/job_applications_screen/job_applications_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_home_screen/job_seeker_home_screen.dart';
 import 'package:job_finder_app/utils/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -65,6 +66,8 @@ class MyApp extends StatelessWidget {
             const JobSeekerProfileScreen(),
         JobSeekerHomeScreen.routeName: (context) => const JobSeekerHomeScreen(),
         EmployerHomeScreen.routeName: (context) => const EmployerHomeScreen(),
+        JobApplicationsScreen.routeName: (context) =>
+            const JobApplicationsScreen(),
       },
       initialRoute: isFindUser != null
           ? isFindUser!.isJobSeeker!
