@@ -7,25 +7,30 @@ class CustomButton extends StatelessWidget {
     super.key,
     required this.title,
     required this.onPressed,
+    this.isWhiteBg = false,
   });
   final String title;
   final void Function() onPressed;
+  final bool isWhiteBg;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
-        padding: const EdgeInsets.all(16),
+        backgroundColor: isWhiteBg ? AppColors.white : AppColors.primary,
+        padding: const EdgeInsets.all(10),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(32),
+          side: isWhiteBg
+              ? const BorderSide(color: AppColors.primary, width: 1)
+              : BorderSide.none,
         ),
       ),
       child: Text(
         title,
         style: AppStyle.subTitlesTextStyle.copyWith(
-          color: AppColors.white,
+          color:isWhiteBg ? AppColors.primary: AppColors.white,
         ),
       ),
     );

@@ -14,6 +14,7 @@ class CustomTextField extends StatelessWidget {
     required this.validate,
     this.initialValue,
     this.isSuffix = false,
+    this.line = 1,
   });
   final TextEditingController? controller;
   final TextInputType type;
@@ -25,10 +26,12 @@ class CustomTextField extends StatelessWidget {
   final void Function()? suffixPressed;
   final String? initialValue;
   final bool isSuffix;
+  final int line;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLines: line,
       controller: controller,
       initialValue: initialValue,
       validator: validate,
