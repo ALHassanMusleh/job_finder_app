@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:job_finder_app/data/model/job.dart';
 import 'package:job_finder_app/data/service/common_services/common_services.dart';
 import 'package:job_finder_app/presentation/screens/employer/add_job_requirements_screen/add_job_requirement_screen.dart';
 import 'package:job_finder_app/utils/app_colors.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
-import 'package:job_finder_app/utils/extensions.dart';
 import 'package:job_finder_app/utils/widgets/custom_button.dart';
 import 'package:job_finder_app/utils/widgets/custom_text_field.dart';
 import 'package:job_finder_app/utils/widgets/pick_image_widget.dart';
@@ -67,13 +67,10 @@ class _AddJobTabState extends State<AddJobTab> {
                 const SizedBox(height: 15),
                 CustomTextField(
                   // initialValue: widget.user.user!.email! ?? ' dhfd',
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.number,
                   validate: (text) {
                     if (text == null || text.isEmpty == true) {
                       return "emails can not be empty";
-                    }
-                    if (!text.isValidEmail) {
-                      return "Please enter a valid email";
                     }
                     return null;
                   },
@@ -143,9 +140,23 @@ class _AddJobTabState extends State<AddJobTab> {
                 CustomButton(
                   title: 'NEXT',
                   onPressed: () {
+                    if (!formKey.currentState!.validate()) return;
+
+                    Job job = Job(
+                      requirements: [],
+                      image: '',
+                      id: '',
+                      title: jobTitleController.text,
+                      isImageUploaded: false,
+                      location: locationSelected,
+                      salary: double.parse(salaryController.text),
+                      status: statusSelected,
+                      type: typeSelected,
+                    );
                     Navigator.pushNamed(
                       context,
                       AddJobRequirementScreen.routeName,
+                      arguments: [job, imageFile],
                     );
                   },
                 ),

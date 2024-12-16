@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:job_finder_app/data/model/job.dart';
+import 'package:job_finder_app/data/service/employer_services/employer_services.dart';
 import 'package:job_finder_app/utils/app_colors.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
 import 'package:job_finder_app/utils/widgets/custom_button.dart';
@@ -18,12 +22,31 @@ class AddJobRequirementScreen extends StatefulWidget {
 class _AddJobRequirementScreenState extends State<AddJobRequirementScreen> {
   TextEditingController requirementsController = TextEditingController();
 
+  List<String> requirements = [];
+  List<dynamic> arg = [];
+  late Job job;
+  File? imageFile;
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      /// This block is called after build it is only called only once
+      job = arg[0];
+      imageFile = arg[1];
+      setState(() {
+
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    arg = ModalRoute.of(context)!.settings.arguments as List;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Ui / Ux design',
+        title: Text(
+          job.title,
         ),
       ),
       body: Padding(
@@ -60,7 +83,14 @@ class _AddJobRequirementScreenState extends State<AddJobRequirementScreen> {
                             child: CustomButton(
                               title: 'Add',
                               isWhiteBg: true,
-                              onPressed: () {},
+                              onPressed: () {
+                                if(requirementsController.text == ''){
+                                  return;
+                                }
+                                requirements.add(requirementsController.text);
+                                setState(() {});
+                                requirementsController.clear();
+                              },
                             ),
                           ),
                         ],
@@ -82,9 +112,10 @@ class _AddJobRequirementScreenState extends State<AddJobRequirementScreen> {
                       separatorBuilder: (context, index) => const SizedBox(
                         height: 10,
                       ),
-                      itemCount: 10,
-                      itemBuilder: (context, index) =>
-                          CustomReguirementWidget(),
+                      itemCount: requirements.length,
+                      itemBuilder: (context, index) => CustomRequirementsWidget(
+                        text: requirements[index],
+                      ),
                     ),
                   ),
                 ],
@@ -93,8 +124,22 @@ class _AddJobRequirementScreenState extends State<AddJobRequirementScreen> {
             Row(
               children: [
                 Expanded(
-                    child:
-                        CustomButton(title: 'Add new job', onPressed: () {})),
+                  child: CustomButton(
+                    title: 'Add new job',
+                    onPressed: () {
+                      EmployerServices.addNewJob(
+                        context,
+                        title: job.title,
+                        salary: job.salary,
+                        imageFile: imageFile,
+                        locationSelected: job.location,
+                        typeSelected: job.type,
+                        statusSelected: job.status,
+                        requirements: requirements,
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ],
@@ -104,10 +149,12 @@ class _AddJobRequirementScreenState extends State<AddJobRequirementScreen> {
   }
 }
 
-class CustomReguirementWidget extends StatelessWidget {
-  const CustomReguirementWidget({
+class CustomRequirementsWidget extends StatelessWidget {
+  const CustomRequirementsWidget({
     super.key,
+    required this.text,
   });
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +176,7 @@ class CustomReguirementWidget extends StatelessWidget {
           ),
           Expanded(
               child: Text(
-            'sdhsdhhrehsdhpsdohmsdohmsdiohsdoihnsdhoino',
+            text,
             maxLines: 3,
             style: AppStyle.labelStyle
                 .copyWith(fontSize: 14, color: AppColors.black),
