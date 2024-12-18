@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:job_finder_app/data/model/employer.dart';
 
 class Job {
   late String id;
@@ -13,6 +14,12 @@ class Job {
   late DateTime createdAt;
 
   static const String collectionName = 'jobs';
+
+  static CollectionReference get employerJobsCollection =>
+      FirebaseFirestore.instance
+          .collection(Employer.collectionName)
+          .doc(Employer.currentEmployer!.id)
+          .collection(Job.collectionName);
 
   Job({
     required this.id,

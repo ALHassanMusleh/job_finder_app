@@ -157,12 +157,13 @@ abstract class EmployerServices {
 
   static Future<List<Job>> getAllJobsFromThisEmployer() async {
     List<Job> jobsList = [];
-    CollectionReference jobsCollection = FirebaseFirestore.instance
-        .collection(Employer.collectionName)
-        .doc(Employer.currentEmployer!.id)
-        .collection(Job.collectionName);
-    QuerySnapshot querySnapShot =
-        (await jobsCollection.orderBy('createdAt', descending: true).get());
+    // CollectionReference jobsCollection = FirebaseFirestore.instance
+    //     .collection(Employer.collectionName)
+    //     .doc(Employer.currentEmployer!.id)
+    //     .collection(Job.collectionName);
+    QuerySnapshot querySnapShot = (await Job.employerJobsCollection
+        .orderBy('createdAt', descending: true)
+        .get());
     List<QueryDocumentSnapshot> documents = querySnapShot.docs;
     // print(documents.length);
     jobsList = documents.map((doc) {
@@ -186,11 +187,7 @@ abstract class EmployerServices {
 
   static Future<List<Job>> getRecentJobsFromThisEmployer() async {
     List<Job> jobsList = [];
-    CollectionReference jobsCollection = FirebaseFirestore.instance
-        .collection(Employer.collectionName)
-        .doc(Employer.currentEmployer!.id)
-        .collection(Job.collectionName);
-    QuerySnapshot querySnapShot = (await jobsCollection
+    QuerySnapshot querySnapShot = (await Job.employerJobsCollection
         .orderBy('createdAt', descending: true)
         .limit(3)
         .get());
