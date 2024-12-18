@@ -119,20 +119,20 @@ abstract class EmployerServices {
       DocumentReference jobDoc = jobsCollection.doc();
 
       Job job = Job(
-        id: jobDoc.id,
-        title: title,
-        salary: salary,
-        location: locationSelected,
-        type: typeSelected,
-        status: statusSelected,
-        image: imageFile != null
-            ? await CommonServices.uploadImageToSupabase(
-                imageFile: imageFile,
-              )
-            : '',
-        isImageUploaded: imageFile != null ? true : false,
-        requirements: requirements,
-      );
+          id: jobDoc.id,
+          title: title,
+          salary: salary,
+          location: locationSelected,
+          type: typeSelected,
+          status: statusSelected,
+          image: imageFile != null
+              ? await CommonServices.uploadImageToSupabase(
+                  imageFile: imageFile,
+                )
+              : '',
+          isImageUploaded: imageFile != null ? true : false,
+          requirements: requirements,
+          createdAt: DateTime.now());
       print(4);
 
       await jobDoc.set(job.toJson());
@@ -153,5 +153,33 @@ abstract class EmployerServices {
 
       print(e.toString());
     }
+  }
+
+  static Future<List<Job>> getAllJobsFromThisEmployer() async {
+    List<Job> jobsList = [];
+    CollectionReference jobsCollection = FirebaseFirestore.instance
+        .collection(Employer.collectionName)
+        .doc(Employer.currentEmployer!.id)
+        .collection(Job.collectionName);
+    QuerySnapshot querySnapShot = await jobsCollection.get();
+    List<QueryDocumentSnapshot> documents = querySnapShot.docs;
+    // print(documents.length);
+    jobsList = documents.map((doc) {
+      Map<String, dynamic> json = doc.data() as Map<String, dynamic>;
+      return Job.fromJson(json);
+    }).toList();
+    print(jobsList);
+
+    // jobsList = jobsList.where((todo) =>
+    // // todo.date.year == selectedDateCalender.year &&
+    // // todo.date.month == selectedDateCalender.month &&
+    // // todo.date.day == selectedDateCalender.day,
+    // selectedDateCalender.isSameDate(todo.date)).toList(); // extension
+
+    jobsList.sort((job1, job2) {
+      return job1.createdAt.compareTo(job2.createdAt);
+    });
+
+    return jobsList;
   }
 }

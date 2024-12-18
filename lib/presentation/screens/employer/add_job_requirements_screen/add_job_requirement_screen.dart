@@ -32,9 +32,7 @@ class _AddJobRequirementScreenState extends State<AddJobRequirementScreen> {
       /// This block is called after build it is only called only once
       job = arg[0];
       imageFile = arg[1];
-      setState(() {
-
-      });
+      setState(() {});
     });
     super.initState();
   }
@@ -84,7 +82,7 @@ class _AddJobRequirementScreenState extends State<AddJobRequirementScreen> {
                               title: 'Add',
                               isWhiteBg: true,
                               onPressed: () {
-                                if(requirementsController.text == ''){
+                                if (requirementsController.text == '') {
                                   return;
                                 }
                                 requirements.add(requirementsController.text);
@@ -167,7 +165,7 @@ class CustomRequirementsWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(
+          const Icon(
             Iconsax.tick_circle,
             color: AppColors.primary,
           ),
@@ -175,12 +173,13 @@ class CustomRequirementsWidget extends StatelessWidget {
             width: 5,
           ),
           Expanded(
-              child: Text(
-            text,
-            maxLines: 3,
-            style: AppStyle.labelStyle
-                .copyWith(fontSize: 14, color: AppColors.black),
-          )),
+            child: Text(
+              text,
+              maxLines: 3,
+              style: AppStyle.labelStyle
+                  .copyWith(fontSize: 14, color: AppColors.black),
+            ),
+          ),
         ],
       ),
     );

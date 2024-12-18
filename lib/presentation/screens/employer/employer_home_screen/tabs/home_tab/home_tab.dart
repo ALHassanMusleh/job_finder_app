@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:job_finder_app/data/model/employer.dart';
+import 'package:job_finder_app/data/model/job.dart';
 import 'package:job_finder_app/utils/app_colors.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
 import 'package:job_finder_app/utils/widgets/custom_button.dart';
@@ -45,8 +48,8 @@ class HomeTab extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: 5,
-          itemBuilder: (context, index) => CustomJobAppliedAndDetails(),
-          separatorBuilder: (context, index) => SizedBox(
+          itemBuilder: (context, index) => const CustomJobAppliedAndDetails(),
+          separatorBuilder: (context, index) => const SizedBox(
             height: 10,
           ),
         ),
@@ -58,21 +61,21 @@ class HomeTab extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Your latest jobs',
           style: AppStyle.titlesTextStyle,
         ),
         const SizedBox(
           height: 20,
         ),
-        SizedBox(
-          height: 130,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 5,
-            itemBuilder: (context, index) => CustomJobCard(),
-          ),
-        ),
+        // SizedBox(
+        //   height: 130,
+        //   child: ListView.builder(
+        //     scrollDirection: Axis.horizontal,
+        //     itemCount: 5,
+        //     itemBuilder: (context, index) => const CustomJobCard(),
+        //   ),
+        // ),
       ],
     );
   }
@@ -136,7 +139,10 @@ class CustomJobAppliedAndDetails extends StatelessWidget {
 class CustomJobCard extends StatelessWidget {
   const CustomJobCard({
     super.key,
+    required this.job,
   });
+
+  final Job job;
 
   @override
   Widget build(BuildContext context) {
@@ -160,10 +166,20 @@ class CustomJobCard extends StatelessWidget {
                   width: 1,
                 ),
               ),
-              child: Image.asset(
-                'assets/images/Icon.png',
-                height: 60,
-                width: 60,
+              child: CircleAvatar(
+                backgroundColor: const Color(0xffF7F7FC),
+                radius: 70,
+                child: job.isImageUploaded
+                    ? CachedNetworkImage(
+                        imageUrl: job.image!,
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                        width: MediaQuery.of(context).size.width * .31,
+                        height: MediaQuery.of(context).size.height * .22,
+                      )
+                    : Image.asset('assets/images/businessman.png'),
               ),
             ),
           ),
@@ -177,17 +193,17 @@ class CustomJobCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'UI/UX Designer',
+                  job.title,
                   maxLines: 1,
                   style: AppStyle.titlesJobTextStyle.copyWith(),
                 ),
                 Text(
-                  'Twitter',
+                  '${Employer.currentEmployer?.name}',
                   maxLines: 1,
-                  style: AppStyle.labelStyle.copyWith(color: Color(0xff394452)),
+                  style: AppStyle.labelStyle.copyWith(color: const Color(0xff394452)),
                 ),
                 Text(
-                  'On site - Full time',
+                  '${job.location} - ${job.type}',
                   maxLines: 1,
                   style: AppStyle.labelStyle,
                 ),
@@ -206,17 +222,17 @@ class CustomJobCard extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.green,
+                      color: job.status == 'Active' ? Colors.green : Colors.red,
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    padding: const EdgeInsets.all(6),
                     child: Text(
-                      'Active',
-                      style: TextStyle(color: AppColors.white),
+                      job.status == 'Active' ? 'Active' : 'Inactive',
+                      style: const TextStyle(color: AppColors.white),
                     ),
-                    padding: EdgeInsets.all(6),
                   ),
                   Text(
-                    '\$1500',
+                    '\$${job.salary}',
                     style: AppStyle.labelStyle.copyWith(
                         color: AppColors.primary, fontWeight: FontWeight.bold),
                   ),
@@ -281,7 +297,7 @@ class CustomJobAppliedCard extends StatelessWidget {
                 Text(
                   'Ui / ux designer',
                   maxLines: 1,
-                  style: AppStyle.labelStyle.copyWith(color: Color(0xff394452)),
+                  style: AppStyle.labelStyle.copyWith(color: const Color(0xff394452)),
                 ),
               ],
             ),

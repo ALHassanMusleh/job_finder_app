@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:job_finder_app/data/model/employer.dart';
-import 'package:job_finder_app/data/service/auth/auth_services.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/tabs/add_job_tab/add_job_tab.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/tabs/chats_tab/chats_tab.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/tabs/home_tab/home_tab.dart';
@@ -33,12 +32,14 @@ class _EmployerHomeScreenState extends State<EmployerHomeScreen> {
       appBar: AppBar(
         title: Text(
           'Welcome, ${Employer.currentEmployer?.name}',
-          style: AppStyle.titlesTextStyle.copyWith(
-            color: AppColors.primary
-          ),
+          style: AppStyle.titlesTextStyle.copyWith(color: AppColors.primary),
         ),
         actions: [
-          IconButton(onPressed: (){}, icon: const Icon(Iconsax.setting),color: AppColors.primary,),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Iconsax.setting),
+            color: AppColors.primary,
+          ),
         ],
       ),
       body: tabs[selectedIndex],

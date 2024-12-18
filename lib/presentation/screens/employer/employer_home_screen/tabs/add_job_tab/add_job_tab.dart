@@ -152,6 +152,7 @@ class _AddJobTabState extends State<AddJobTab> {
                       salary: double.parse(salaryController.text),
                       status: statusSelected,
                       type: typeSelected,
+                      createdAt: DateTime.now(),
                     );
                     Navigator.pushNamed(
                       context,

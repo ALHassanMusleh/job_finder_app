@@ -23,7 +23,7 @@ class JobApplicationsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            InkWell(onTap: () {}, child: const CustomJobCard()),
+            // InkWell(onTap: () {}, child: const CustomJobCard()),
             const SizedBox(
               height: 20,
             ),

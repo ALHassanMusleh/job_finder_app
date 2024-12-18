@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:job_finder_app/data/model/job.dart';
+import 'package:job_finder_app/data/service/employer_services/employer_services.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/tabs/home_tab/home_tab.dart';
 import 'package:job_finder_app/presentation/screens/employer/job_applications_screen/job_applications_screen.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
@@ -23,16 +25,39 @@ class JobsTab extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 10,
-              itemBuilder: (context, index) => InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(
-                        context, JobApplicationsScreen.routeName);
-                  },
-                  child: const CustomJobCard()),
-            ),
+          FutureBuilder<List<Job>>(
+            future: EmployerServices.getAllJobsFromThisEmployer(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    snapshot.error.toString(),
+                    style: const TextStyle(fontSize: 40),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) => InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          JobApplicationsScreen.routeName,
+                        );
+                      },
+                      child: CustomJobCard(
+                        job: snapshot.data![index],
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
           ),
         ],
       ),

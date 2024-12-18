@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Job {
   late String id;
   late String title;
@@ -8,6 +10,7 @@ class Job {
   late List<String>? requirements;
   late String? image;
   late bool isImageUploaded;
+  late DateTime createdAt;
 
   static const String collectionName = 'jobs';
 
@@ -21,6 +24,7 @@ class Job {
     required this.requirements,
     required this.image,
     required this.isImageUploaded,
+    required this.createdAt,
   });
 
   Job.fromJson(dynamic json) {
@@ -32,6 +36,8 @@ class Job {
     status = json['status'];
     image = json['image'];
     isImageUploaded = json['isImageUploaded'];
+    Timestamp timestamp = json['createdAt'];
+    createdAt = timestamp.toDate();
     if (json['requirements'] != null) {
       requirements = [];
       json['requirements'].forEach((v) {
@@ -50,6 +56,7 @@ class Job {
     map['status'] = status;
     map['image'] = image;
     map['isImageUploaded'] = isImageUploaded;
+    map['createdAt'] = createdAt;
     map['requirements'] = requirements;
     // if (requirements != null) {
     //   map['requirements'] = requirements?.map((v) => v).toList();
