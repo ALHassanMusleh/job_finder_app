@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:job_finder_app/data/model/employer.dart';
 import 'package:job_finder_app/data/model/job.dart';
+import 'package:job_finder_app/data/service/employer_services/employer_services.dart';
+import 'package:job_finder_app/presentation/screens/employer/job_applications_screen/job_applications_screen.dart';
 import 'package:job_finder_app/utils/app_colors.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
 import 'package:job_finder_app/utils/widgets/custom_button.dart';
@@ -68,14 +70,42 @@ class HomeTab extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        // SizedBox(
-        //   height: 130,
-        //   child: ListView.builder(
-        //     scrollDirection: Axis.horizontal,
-        //     itemCount: 5,
-        //     itemBuilder: (context, index) => const CustomJobCard(),
-        //   ),
-        // ),
+        FutureBuilder<List<Job>>(
+          future: EmployerServices.getRecentJobsFromThisEmployer(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  snapshot.error.toString(),
+                  style: const TextStyle(fontSize: 40),
+                ),
+              );
+            } else if (snapshot.hasData) {
+              return SizedBox(
+                height: 130,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) => InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        JobApplicationsScreen.routeName,
+                      );
+                    },
+                    child: CustomJobCard(
+                      job: snapshot.data![index],
+                    ),
+                  ),
+                ),
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
       ],
     );
   }
@@ -175,7 +205,8 @@ class CustomJobCard extends StatelessWidget {
                         placeholder: (context, url) => const Center(
                           child: CircularProgressIndicator(),
                         ),
-                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                         width: MediaQuery.of(context).size.width * .31,
                         height: MediaQuery.of(context).size.height * .22,
                       )
@@ -200,7 +231,8 @@ class CustomJobCard extends StatelessWidget {
                 Text(
                   '${Employer.currentEmployer?.name}',
                   maxLines: 1,
-                  style: AppStyle.labelStyle.copyWith(color: const Color(0xff394452)),
+                  style: AppStyle.labelStyle
+                      .copyWith(color: const Color(0xff394452)),
                 ),
                 Text(
                   '${job.location} - ${job.type}',
@@ -297,7 +329,8 @@ class CustomJobAppliedCard extends StatelessWidget {
                 Text(
                   'Ui / ux designer',
                   maxLines: 1,
-                  style: AppStyle.labelStyle.copyWith(color: const Color(0xff394452)),
+                  style: AppStyle.labelStyle
+                      .copyWith(color: const Color(0xff394452)),
                 ),
               ],
             ),

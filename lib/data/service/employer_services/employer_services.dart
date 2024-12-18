@@ -161,7 +161,8 @@ abstract class EmployerServices {
         .collection(Employer.collectionName)
         .doc(Employer.currentEmployer!.id)
         .collection(Job.collectionName);
-    QuerySnapshot querySnapShot = await jobsCollection.get();
+    QuerySnapshot querySnapShot =
+        (await jobsCollection.orderBy('createdAt', descending: true).get());
     List<QueryDocumentSnapshot> documents = querySnapShot.docs;
     // print(documents.length);
     jobsList = documents.map((doc) {
@@ -176,9 +177,29 @@ abstract class EmployerServices {
     // // todo.date.day == selectedDateCalender.day,
     // selectedDateCalender.isSameDate(todo.date)).toList(); // extension
 
-    jobsList.sort((job1, job2) {
-      return job1.createdAt.compareTo(job2.createdAt);
-    });
+    // jobsList.sort((job1, job2) {
+    //   return job1.createdAt.compareTo(job2.createdAt);
+    // });
+
+    return jobsList;
+  }
+
+  static Future<List<Job>> getRecentJobsFromThisEmployer() async {
+    List<Job> jobsList = [];
+    CollectionReference jobsCollection = FirebaseFirestore.instance
+        .collection(Employer.collectionName)
+        .doc(Employer.currentEmployer!.id)
+        .collection(Job.collectionName);
+    QuerySnapshot querySnapShot = (await jobsCollection
+        .orderBy('createdAt', descending: true)
+        .limit(3)
+        .get());
+    List<QueryDocumentSnapshot> documents = querySnapShot.docs;
+    jobsList = documents.map((doc) {
+      Map<String, dynamic> json = doc.data() as Map<String, dynamic>;
+      return Job.fromJson(json);
+    }).toList();
+    print(jobsList);
 
     return jobsList;
   }
