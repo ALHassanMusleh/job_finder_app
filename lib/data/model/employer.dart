@@ -13,6 +13,10 @@ class Employer {
 
   static const String collectionName = 'employer';
 
+  static DocumentReference get employerCollection => FirebaseFirestore.instance
+      .collection(Employer.collectionName)
+      .doc(Employer.currentEmployer!.id);
+
   Employer({
     required this.id,
     required this.name,

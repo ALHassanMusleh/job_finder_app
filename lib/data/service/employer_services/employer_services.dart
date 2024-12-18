@@ -19,15 +19,15 @@ abstract class EmployerServices {
       required File? imageFile,
       required DateTime selectedDate,
       required String id}) async {
-    print(1);
+    debugPrint('1');
     if (!formKey.currentState!.validate()) return;
     try {
-      print(2);
+      debugPrint('2');
 
       showLoading(context);
       CollectionReference employerCollection =
           FirebaseFirestore.instance.collection(Employer.collectionName);
-      print(3);
+      debugPrint('3');
 
       Employer employer = Employer(
         id: id,
@@ -42,7 +42,7 @@ abstract class EmployerServices {
         companyEstablishmentDate: selectedDate,
         isImageUploaded: imageFile != null ? true : false,
       );
-      print(4);
+      debugPrint('4');
 
       DocumentReference employerDoc = employerCollection.doc(employer.id);
       await employerDoc.set(employer.toJson());
@@ -64,7 +64,7 @@ abstract class EmployerServices {
         hideDialog(context);
       }
 
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -94,14 +94,14 @@ abstract class EmployerServices {
     List<String>? requirements,
   }) async {
     try {
-      print(2);
+      debugPrint('1');
 
       showLoading(context);
       CollectionReference jobsCollection = FirebaseFirestore.instance
           .collection(Employer.collectionName)
           .doc(Employer.currentEmployer!.id)
           .collection(Job.collectionName);
-      print(3);
+      debugPrint('2');
 
       // Job employer = Employer(
       //   id: id,
@@ -133,7 +133,7 @@ abstract class EmployerServices {
           isImageUploaded: imageFile != null ? true : false,
           requirements: requirements,
           createdAt: DateTime.now());
-      print(4);
+      debugPrint('3');
 
       await jobDoc.set(job.toJson());
 
@@ -199,5 +199,68 @@ abstract class EmployerServices {
     print(jobsList);
 
     return jobsList;
+  }
+
+  static void updateEmployerProfile(
+    BuildContext context, {
+    required TextEditingController nameController,
+    required TextEditingController emailController,
+    required TextEditingController addressController,
+    required GlobalKey<FormState> formKey,
+    required File? imageFile,
+    required DateTime selectedDate,
+  }) async {
+    if (!formKey.currentState!.validate()) return;
+    try {
+      showLoading(context);
+      Employer employer = Employer(
+        id: Employer.currentEmployer!.id,
+        name: nameController.text,
+        email: emailController.text,
+        address: addressController.text,
+        // image: Employer.currentEmployer!.isImageUploaded
+        //     ? Employer.currentEmployer?.image
+        //     : imageFile != null
+        //         ? await CommonServices.uploadImageToSupabase(
+        //             imageFile: imageFile,
+        //           )
+        //         : '',
+        image: imageFile == null
+            ? Employer.currentEmployer!.isImageUploaded
+                ? Employer.currentEmployer?.image
+                : ''
+            : imageFile != null
+                ? await CommonServices.uploadImageToSupabase(
+                    imageFile: imageFile,
+                  )
+                : '',
+        companyEstablishmentDate: selectedDate,
+        isImageUploaded: imageFile == null
+            ? Employer.currentEmployer!.isImageUploaded
+                ? true
+                : false
+            : imageFile != null
+                ? true
+                : false,
+      );
+
+      await Employer.employerCollection.update(employer.toJson());
+
+      if (context.mounted) {
+        Employer.currentEmployer = employer;
+        hideDialog(context);
+        showMessage(
+          context,
+          title: 'Success',
+          body: 'Edited Succefully Profile',
+          posButtonTitle: 'ok',
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        hideDialog(context);
+        showMessage(context, title: e.toString());
+      }
+    }
   }
 }

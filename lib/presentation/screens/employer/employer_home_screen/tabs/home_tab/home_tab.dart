@@ -20,6 +20,10 @@ class HomeTab extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              'Welcome, ${Employer.currentEmployer?.name}',
+              style: AppStyle.titlesTextStyle.copyWith(color: AppColors.primary),
+            ),
             buildSearchContainer(),
             const SizedBox(
               height: 30,

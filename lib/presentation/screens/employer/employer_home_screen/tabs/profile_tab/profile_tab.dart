@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:job_finder_app/data/model/employer.dart';
 import 'package:job_finder_app/data/service/common_services/common_services.dart';
+import 'package:job_finder_app/data/service/employer_services/employer_services.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
 import 'package:job_finder_app/utils/extensions.dart';
 import 'package:job_finder_app/utils/widgets/custom_button.dart';
@@ -51,7 +52,7 @@ class _ProfileTabState extends State<ProfileTab> {
                 ),
                 const SizedBox(height: 15),
                 Text(
-                  'Upload your image or company logo',
+                  'Upload your image or company logo ${Employer.currentEmployer?.name}',
                   style: AppStyle.bottomSheetTitle.copyWith(
                     fontSize: 16,
                   ),
@@ -131,7 +132,17 @@ class _ProfileTabState extends State<ProfileTab> {
                 const SizedBox(height: 30),
                 CustomButton(
                   title: 'EDIT',
-                  onPressed: () {},
+                  onPressed: () {
+                    EmployerServices.updateEmployerProfile(
+                      context,
+                      nameController: nameController,
+                      emailController: emailController,
+                      addressController: addressController,
+                      formKey: formKey,
+                      imageFile: imageFile,
+                      selectedDate: selectedDate,
+                    );
+                  },
                 ),
                 const SizedBox(height: 20),
               ],
