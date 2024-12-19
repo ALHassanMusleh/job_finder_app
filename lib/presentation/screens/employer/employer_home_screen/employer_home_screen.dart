@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:job_finder_app/presentation/screens/common/Auth/login_screen/login_screen.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/tabs/add_job_tab/add_job_tab.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/tabs/chats_tab/chats_tab.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/tabs/home_tab/home_tab.dart';
@@ -7,6 +8,7 @@ import 'package:job_finder_app/presentation/screens/employer/employer_home_scree
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/tabs/profile_tab/profile_tab.dart';
 import 'package:job_finder_app/utils/app_colors.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
+import 'package:job_finder_app/utils/shared_pref_utils.dart';
 
 class EmployerHomeScreen extends StatefulWidget {
   const EmployerHomeScreen({super.key});
@@ -43,7 +45,10 @@ class _EmployerHomeScreenState extends State<EmployerHomeScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              SharedPrefUtils.removeData();
+              Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+            },
             icon: const Icon(Iconsax.setting),
             color: AppColors.black,
           ),
