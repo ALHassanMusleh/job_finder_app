@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:job_finder_app/data/model/employer.dart';
 import 'package:job_finder_app/data/model/job.dart';
 import 'package:job_finder_app/data/service/common_services/common_services.dart';
 import 'package:job_finder_app/presentation/screens/employer/add_job_requirements_screen/add_job_requirement_screen.dart';
@@ -153,6 +154,7 @@ class _AddJobTabState extends State<AddJobTab> {
                       status: statusSelected,
                       type: typeSelected,
                       createdAt: DateTime.now(),
+                      employerName: Employer.currentEmployer!.name,
                     );
                     Navigator.pushNamed(
                       context,

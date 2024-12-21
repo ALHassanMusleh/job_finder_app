@@ -22,7 +22,11 @@ class HomeTab extends StatelessWidget {
           children: [
             Text(
               'Welcome, ${Employer.currentEmployer?.name}',
-              style: AppStyle.titlesTextStyle.copyWith(color: AppColors.primary),
+              style:
+                  AppStyle.titlesTextStyle.copyWith(color: AppColors.primary),
+            ),
+            const SizedBox(
+              height: 30,
             ),
             buildSearchContainer(),
             const SizedBox(

@@ -52,6 +52,7 @@ class _JobSeekerHomeScreenState extends State<JobSeekerHomeScreen> {
           IconButton(
             onPressed: () {
               SharedPrefUtils.removeData();
+              JobSeeker.currentJobSeeker = null;
               Navigator.pushReplacementNamed(context, LoginScreen.routeName);
             },
             icon: const Icon(Iconsax.setting),

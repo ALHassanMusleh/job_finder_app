@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:job_finder_app/data/model/employer.dart';
 import 'package:job_finder_app/presentation/screens/common/Auth/login_screen/login_screen.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/tabs/add_job_tab/add_job_tab.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/tabs/chats_tab/chats_tab.dart';
@@ -47,6 +48,7 @@ class _EmployerHomeScreenState extends State<EmployerHomeScreen> {
           IconButton(
             onPressed: () {
               SharedPrefUtils.removeData();
+              Employer.currentEmployer = null;
               Navigator.pushReplacementNamed(context, LoginScreen.routeName);
             },
             icon: const Icon(Iconsax.setting),

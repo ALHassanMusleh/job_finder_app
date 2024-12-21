@@ -12,6 +12,7 @@ class Job {
   late String? image;
   late bool isImageUploaded;
   late DateTime createdAt;
+  late String employerName;
 
   static const String collectionName = 'jobs';
 
@@ -20,6 +21,9 @@ class Job {
           .collection(Employer.collectionName)
           .doc(Employer.currentEmployer!.id)
           .collection(Job.collectionName);
+
+  static Query<Map<String, dynamic>> get jobsCollection =>
+      FirebaseFirestore.instance.collectionGroup(Job.collectionName);
 
   Job({
     required this.id,
@@ -32,6 +36,7 @@ class Job {
     required this.image,
     required this.isImageUploaded,
     required this.createdAt,
+    required this.employerName,
   });
 
   Job.fromJson(dynamic json) {
@@ -42,6 +47,7 @@ class Job {
     type = json['type'];
     status = json['status'];
     image = json['image'];
+    employerName = json['employerName'];
     isImageUploaded = json['isImageUploaded'];
     Timestamp timestamp = json['createdAt'];
     createdAt = timestamp.toDate();
@@ -62,6 +68,7 @@ class Job {
     map['type'] = type;
     map['status'] = status;
     map['image'] = image;
+    map['employerName'] = employerName;
     map['isImageUploaded'] = isImageUploaded;
     map['createdAt'] = createdAt;
     map['requirements'] = requirements;

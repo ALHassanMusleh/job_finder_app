@@ -119,20 +119,22 @@ abstract class EmployerServices {
       DocumentReference jobDoc = jobsCollection.doc();
 
       Job job = Job(
-          id: jobDoc.id,
-          title: title,
-          salary: salary,
-          location: locationSelected,
-          type: typeSelected,
-          status: statusSelected,
-          image: imageFile != null
-              ? await CommonServices.uploadImageToSupabase(
-                  imageFile: imageFile,
-                )
-              : '',
-          isImageUploaded: imageFile != null ? true : false,
-          requirements: requirements,
-          createdAt: DateTime.now());
+        id: jobDoc.id,
+        title: title,
+        salary: salary,
+        location: locationSelected,
+        type: typeSelected,
+        status: statusSelected,
+        image: imageFile != null
+            ? await CommonServices.uploadImageToSupabase(
+                imageFile: imageFile,
+              )
+            : '',
+        isImageUploaded: imageFile != null ? true : false,
+        requirements: requirements,
+        createdAt: DateTime.now(),
+        employerName: Employer.currentEmployer!.name,
+      );
       debugPrint('3');
 
       await jobDoc.set(job.toJson());
