@@ -162,4 +162,24 @@ abstract class JobSeekerServices {
 
     return employersList;
   }
+
+  static Future<List<Job>> getAllJobsFromEmployer(
+      {required String employerId}) async {
+    List<Job> jobsList = [];
+    QuerySnapshot querySnapShot = (await FirebaseFirestore.instance
+        .collection(Employer.collectionName)
+        .doc(employerId)
+        .collection(Job.collectionName)
+        .orderBy('createdAt', descending: true)
+        .get());
+    List<QueryDocumentSnapshot> documents = querySnapShot.docs;
+    jobsList = documents.map((doc) {
+      Map<String, dynamic> json = doc.data() as Map<String, dynamic>;
+      return Job.fromJson(json);
+    }).toList();
+
+    print(jobsList);
+
+    return jobsList;
+  }
 }
