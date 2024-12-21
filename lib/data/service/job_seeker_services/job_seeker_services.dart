@@ -7,7 +7,6 @@ import 'package:job_finder_app/data/model/employer.dart';
 import 'package:job_finder_app/data/model/job.dart';
 import 'package:job_finder_app/data/model/job_seeker.dart';
 import 'package:job_finder_app/data/service/common_services/common_services.dart';
-import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/employer_home_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_home_screen/job_seeker_home_screen.dart';
 import 'package:job_finder_app/utils/dialog_utils.dart';
 import 'package:job_finder_app/utils/shared_pref_utils.dart';
@@ -132,6 +131,38 @@ abstract class JobSeekerServices {
   //   }
   //   return employers;
   // }
+
+  static Future<List<Employer>> getTopEmployers() async {
+    final firestore = FirebaseFirestore.instance;
+
+    // Get all employers
+    final employersSnapshot = await firestore.collection(Employer.collectionName).get();
+
+    List<Employer> topEmployers = [];
+
+    for (var employerDoc in employersSnapshot.docs) {
+      // Count documents in the Jobs subcollection for each employer
+      final jobsSnapshot = await firestore
+          .collection(Employer.collectionName)
+          .doc(employerDoc.id)
+          .collection(Job.collectionName)
+          .get();
+
+      int jobCount = jobsSnapshot.size;
+
+      if (jobCount >= 1) {
+        // Create an Employer instance from the document
+        final employer = Employer.fromJson({
+          ...employerDoc.data(), // Spread document data
+        });
+
+        topEmployers.add(employer);
+      }
+    }
+
+    // Return the list of top employers
+    return topEmployers;
+  }
 
   static Future<List<Employer>> getAllEmployer() async {
     List<Employer> employersList = [];

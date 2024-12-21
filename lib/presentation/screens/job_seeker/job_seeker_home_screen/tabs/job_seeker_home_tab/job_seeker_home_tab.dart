@@ -146,43 +146,42 @@ class JobSeekerHomeTab extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        // FutureBuilder<List<Employer>>(
-        //   future: JobSeekerServices.getTopEmployer(),
-        //   builder: (context, snapshot) {
-        //     if (snapshot.hasError) {
-        //       throw Exception(snapshot.error.toString());
-        //       return Center(
-        //         child: Text(
-        //           snapshot.error.toString(),
-        //           style: const TextStyle(fontSize: 40),
-        //         ),
-        //       );
-        //     } else if (snapshot.hasData) {
-        //       return SizedBox(
-        //         height: 130,
-        //         child: ListView.builder(
-        //           scrollDirection: Axis.horizontal,
-        //           itemCount: snapshot.data!.length,
-        //           itemBuilder: (context, index) => InkWell(
-        //             onTap: () {
-        //               // Navigator.pushNamed(
-        //               //   context,
-        //               //   JobApplicationsScreen.routeName,
-        //               // );
-        //             },
-        //             child: CustomEmployerCard(
-        //               employer: snapshot.data![index],
-        //             ),
-        //           ),
-        //         ),
-        //       );
-        //     } else {
-        //       return const Center(
-        //         child: CircularProgressIndicator(),
-        //       );
-        //     }
-        //   },
-        // ),
+        FutureBuilder<List<Employer>>(
+          future: JobSeekerServices.getTopEmployers(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              // throw Exception(snapshot.error.toString());
+              return Center(
+                child: Text(
+                  snapshot.error.toString(),
+                  style: const TextStyle(fontSize: 40),
+                ),
+              );
+            } else if (snapshot.hasData) {
+              return SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) => InkWell(
+                    onTap: () {
+                      // Navigator.pushNamed(
+                      //   context,
+                      //   JobApplicationsScreen.routeName,
+                      // );
+                    },
+                    child: CustomEmployerCard(
+                      employer: snapshot.data![index],
+                    ),
+                  ),
+                ),
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
       ],
     );
   }
