@@ -13,6 +13,10 @@ class JobSeeker {
 
   static JobSeeker? currentJobSeeker;
 
+  static DocumentReference get jobSeekerCollection => FirebaseFirestore.instance
+      .collection(JobSeeker.collectionName)
+      .doc(JobSeeker.currentJobSeeker!.id);
+
   JobSeeker({
     required this.id,
     required this.name,

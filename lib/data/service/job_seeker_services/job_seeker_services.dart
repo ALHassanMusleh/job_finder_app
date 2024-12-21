@@ -182,4 +182,62 @@ abstract class JobSeekerServices {
 
     return jobsList;
   }
+
+  static void updateJobSeekerProfile(
+    BuildContext context, {
+    required TextEditingController nameController,
+    required TextEditingController emailController,
+    required TextEditingController occupationController,
+    required TextEditingController addressController,
+    required GlobalKey<FormState> formKey,
+    File? imageFile,
+    required DateTime selectedDate,
+  }) async {
+    if (!formKey.currentState!.validate()) return;
+    try {
+      showLoading(context);
+      JobSeeker jobSeeker = JobSeeker(
+        id: JobSeeker.currentJobSeeker!.id,
+        name: nameController.text,
+        email: emailController.text,
+        occupation: occupationController.text,
+        dateOfBirth: selectedDate,
+        address: addressController.text,
+        image: imageFile == null
+            ? JobSeeker.currentJobSeeker!.isImageUploaded
+                ? JobSeeker.currentJobSeeker?.image
+                : ''
+            : imageFile != null
+                ? await CommonServices.uploadImageToSupabase(
+                    imageFile: imageFile,
+                  )
+                : '',
+        isImageUploaded: imageFile == null
+            ? JobSeeker.currentJobSeeker!.isImageUploaded
+                ? true
+                : false
+            : imageFile != null
+                ? true
+                : false,
+      );
+
+      await JobSeeker.jobSeekerCollection.update(jobSeeker.toJson());
+
+      if (context.mounted) {
+        JobSeeker.currentJobSeeker = jobSeeker;
+        hideDialog(context);
+        showMessage(
+          context,
+          title: 'Success',
+          body: 'Edited Succefully Profile',
+          posButtonTitle: 'ok',
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        hideDialog(context);
+        showMessage(context, title: e.toString());
+      }
+    }
+  }
 }
