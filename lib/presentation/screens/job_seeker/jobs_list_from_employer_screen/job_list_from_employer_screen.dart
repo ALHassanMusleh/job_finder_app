@@ -22,8 +22,8 @@ class _JobListFromEmployerScreenState extends State<JobListFromEmployerScreen> {
     employer = ModalRoute.of(context)!.settings.arguments as Employer;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          employer.name,
+        title: const Text(
+          'Jobs',
           style: AppStyle.titlesTextStyle,
         ),
       ),
@@ -35,7 +35,9 @@ class _JobListFromEmployerScreenState extends State<JobListFromEmployerScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // InkWell(onTap: () {}, child: const CustomJobCard()),
+            CustomEmployerCard(
+              employer: employer,
+            ),
             const SizedBox(
               height: 20,
             ),

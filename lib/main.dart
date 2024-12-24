@@ -11,6 +11,7 @@ import 'package:job_finder_app/presentation/screens/employer/add_job_requirement
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/employer_home_screen.dart';
 import 'package:job_finder_app/presentation/screens/employer/job_applications_screen/job_applications_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/employer_list_screen/employer_list_screen.dart';
+import 'package:job_finder_app/presentation/screens/job_seeker/job_details_screen/job_details_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_home_screen/job_seeker_home_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/jobs_list_from_employer_screen/job_list_from_employer_screen.dart';
 import 'package:job_finder_app/utils/app_theme.dart';
@@ -71,9 +72,12 @@ class MyApp extends StatelessWidget {
         EmployerHomeScreen.routeName: (context) => const EmployerHomeScreen(),
         JobApplicationsScreen.routeName: (context) =>
             const JobApplicationsScreen(),
-        AddJobRequirementScreen.routeName :(context) => const AddJobRequirementScreen(),
-        EmployerListScreen.routeName :(context) => const EmployerListScreen(),
-        JobListFromEmployerScreen.routeName :(context) => const JobListFromEmployerScreen(),
+        AddJobRequirementScreen.routeName: (context) =>
+            const AddJobRequirementScreen(),
+        EmployerListScreen.routeName: (context) => const EmployerListScreen(),
+        JobListFromEmployerScreen.routeName: (context) =>
+            const JobListFromEmployerScreen(),
+        JobDetailsScreen.routeName: (context) => const JobDetailsScreen(),
       },
       initialRoute: isFindUser != null
           ? isFindUser!.isJobSeeker!

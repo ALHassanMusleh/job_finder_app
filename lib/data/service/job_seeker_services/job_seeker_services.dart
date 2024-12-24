@@ -136,7 +136,8 @@ abstract class JobSeekerServices {
     final firestore = FirebaseFirestore.instance;
 
     // Get all employers
-    final employersSnapshot = await firestore.collection(Employer.collectionName).get();
+    final employersSnapshot =
+        await firestore.collection(Employer.collectionName).get();
 
     List<Employer> topEmployers = [];
 

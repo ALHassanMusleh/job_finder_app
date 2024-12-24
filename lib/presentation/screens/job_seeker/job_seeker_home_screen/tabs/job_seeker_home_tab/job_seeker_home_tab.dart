@@ -7,6 +7,7 @@ import 'package:job_finder_app/data/model/job_seeker.dart';
 import 'package:job_finder_app/data/service/job_seeker_services/job_seeker_services.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/tabs/home_tab/home_tab.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/employer_list_screen/employer_list_screen.dart';
+import 'package:job_finder_app/presentation/screens/job_seeker/job_details_screen/job_details_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_home_screen/tabs/job_seeker_saved_jobs_tab/job_seeker_saved_jobs_tab.dart';
 import 'package:job_finder_app/utils/app_colors.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
@@ -191,105 +192,122 @@ class CustomJobCardForJobSeeker extends StatelessWidget {
   const CustomJobCardForJobSeeker({
     super.key,
     required this.job,
+    this.isShow = false,
   });
 
   final Job job;
+  final bool isShow;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-      width: MediaQuery.of(context).size.width * .89,
-      height: 110,
-      padding: const EdgeInsets.all(12),
-      decoration: AppStyle.containerDecoration,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            flex: 2,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: const Color(0xFFF9F9FA),
-                  width: 1,
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          JobDetailsScreen.routeName,
+          arguments: job,
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+        width: MediaQuery.of(context).size.width * .89,
+        height: 110,
+        padding: const EdgeInsets.all(12),
+        decoration: AppStyle.containerDecoration,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: const Color(0xFFF9F9FA),
+                    width: 1,
+                  ),
+                ),
+                child: CircleAvatar(
+                  backgroundColor: const Color(0xffF7F7FC),
+                  radius: 70,
+                  child: job.isImageUploaded
+                      ? CachedNetworkImage(
+                          imageUrl: job.image!,
+                          placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                          width: MediaQuery.of(context).size.width * .31,
+                          height: MediaQuery.of(context).size.height * .22,
+                        )
+                      : Image.asset('assets/images/businessman.png'),
                 ),
               ),
-              child: CircleAvatar(
-                backgroundColor: const Color(0xffF7F7FC),
-                radius: 70,
-                child: job.isImageUploaded
-                    ? CachedNetworkImage(
-                        imageUrl: job.image!,
-                        placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                        width: MediaQuery.of(context).size.width * .31,
-                        height: MediaQuery.of(context).size.height * .22,
-                      )
-                    : Image.asset('assets/images/businessman.png'),
-              ),
             ),
-          ),
-          const SizedBox(
-            width: 12,
-          ),
-          Expanded(
-            flex: 5,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  job.title,
-                  maxLines: 1,
-                  style: AppStyle.titlesJobTextStyle.copyWith(),
-                ),
-                Text(
-                  job.employerName,
-                  maxLines: 1,
-                  style: AppStyle.labelStyle
-                      .copyWith(color: const Color(0xff394452)),
-                ),
-                Text(
-                  '${job.location} - ${job.type}',
-                  maxLines: 1,
-                  style: AppStyle.labelStyle,
-                ),
-              ],
+            const SizedBox(
+              width: 12,
             ),
-          ),
-          const SizedBox(
-            width: 12,
-          ),
-          Expanded(
-            flex: 3,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+            Expanded(
+              flex: 5,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  InkWell(
-                    onTap: () {},
-                    child: const Icon(
-                      Icons.bookmark_outline,
-                      color: AppColors.primary,
-                    ),
+                  Text(
+                    job.title,
+                    maxLines: 1,
+                    style: AppStyle.titlesJobTextStyle.copyWith(),
                   ),
                   Text(
-                    '\$${job.salary}',
-                    style: AppStyle.labelStyle.copyWith(
-                        color: AppColors.primary, fontWeight: FontWeight.bold),
+                    job.employerName,
+                    maxLines: 1,
+                    style: AppStyle.labelStyle
+                        .copyWith(color: const Color(0xff394452)),
                   ),
+                  isShow
+                      ? Text(
+                          '${job.location} - ${job.type}',
+                          maxLines: 1,
+                          style: AppStyle.labelStyle,
+                        )
+                      : Container(),
                 ],
               ),
             ),
-          ),
-        ],
+            const SizedBox(
+              width: 12,
+            ),
+            isShow
+                ? Expanded(
+                    flex: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {},
+                            child: const Icon(
+                              Icons.bookmark_outline,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          Text(
+                            '\$${job.salary}',
+                            style: AppStyle.labelStyle.copyWith(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
       ),
     );
   }
