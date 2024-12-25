@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:job_finder_app/data/model/app_user.dart';
+import 'package:job_finder_app/data/model/application.dart';
 import 'package:job_finder_app/data/model/employer.dart';
 import 'package:job_finder_app/data/model/job.dart';
 import 'package:job_finder_app/data/model/job_seeker.dart';
@@ -270,6 +271,58 @@ abstract class JobSeekerServices {
         hideDialog(context);
         showMessage(context, title: e.toString());
       }
+    }
+  }
+
+  static Future<void> applyForAnyJob(
+    BuildContext context, {
+    required File? file,
+    required Job job,
+    required String? jobSeekerMessage,
+  }) async {
+    try {
+      showLoading(context);
+      CollectionReference applicationCollection = FirebaseFirestore.instance
+          .collection(Employer.collectionName)
+          .doc(job.employerId)
+          .collection(Job.collectionName)
+          .doc(job.id)
+          .collection(Application.collectionName);
+      debugPrint('2');
+
+      DocumentReference applicationDoc = applicationCollection.doc();
+
+      Application application = Application(
+        id: applicationDoc.id,
+        jobSeekerId: JobSeeker.currentJobSeeker!.id,
+        jobSeekerMessage: jobSeekerMessage,
+        employerMessage: '',
+        resume: file != null
+            ? await CommonServices.uploadFileToSupabase(
+                file: file,
+              )
+            : '',
+        jobId: job.id,
+        status: 'Pending',
+      );
+
+      await applicationDoc.set(application.toJson());
+
+      if (context.mounted) {
+        hideDialog(context);
+        showMessage(
+          context,
+          title: 'Success',
+          body: 'Apply for job successfully',
+          posButtonTitle: 'ok',
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        hideDialog(context);
+      }
+
+      print(e.toString());
     }
   }
 }

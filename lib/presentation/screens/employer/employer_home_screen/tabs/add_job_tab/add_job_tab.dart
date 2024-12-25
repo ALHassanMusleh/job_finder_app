@@ -155,6 +155,7 @@ class _AddJobTabState extends State<AddJobTab> {
                       type: typeSelected,
                       createdAt: DateTime.now(),
                       employerName: Employer.currentEmployer!.name,
+                      employerId: Employer.currentEmployer!.id,
                     );
                     Navigator.pushNamed(
                       context,

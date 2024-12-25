@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:job_finder_app/data/model/job.dart';
+import 'package:job_finder_app/data/service/common_services/common_services.dart';
 import 'package:job_finder_app/presentation/screens/employer/add_job_requirements_screen/add_job_requirement_screen.dart';
+import 'package:job_finder_app/presentation/screens/job_seeker/apply_for_job_screen/apply_for_job_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_home_screen/tabs/job_seeker_home_tab/job_seeker_home_tab.dart';
 import 'package:job_finder_app/utils/app_colors.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
@@ -16,7 +21,7 @@ class JobDetailsScreen extends StatefulWidget {
 
 class _JobDetailsScreenState extends State<JobDetailsScreen> {
   late Job job;
-
+  File? file;
   @override
   Widget build(BuildContext context) {
     job = ModalRoute.of(context)!.settings.arguments as Job;
@@ -144,16 +149,20 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
               children: [
                 Expanded(
                   flex: 2,
-                  child: Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(
-                      Icons.bookmark_outline,
-                      color: AppColors.primary,
-                      size: 30,
+                  child: InkWell(
+                    onTap: ()  {
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(
+                        Icons.bookmark_outline,
+                        color: AppColors.primary,
+                        size: 30,
+                      ),
                     ),
                   ),
                 ),
@@ -164,7 +173,10 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                   flex: 7,
                   child: CustomButton(
                     title: 'Apply for this job',
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, ApplyForJobScreen.routeName,
+                          arguments: job);
+                    },
                   ),
                 ),
               ],

@@ -13,6 +13,7 @@ class Job {
   late bool isImageUploaded;
   late DateTime createdAt;
   late String employerName;
+  late String employerId;
 
   static const String collectionName = 'jobs';
 
@@ -37,6 +38,7 @@ class Job {
     required this.isImageUploaded,
     required this.createdAt,
     required this.employerName,
+    required this.employerId,
   });
 
   Job.fromJson(dynamic json) {
@@ -47,6 +49,7 @@ class Job {
     type = json['type'];
     status = json['status'];
     image = json['image'];
+    employerId = json['employerId'];
     employerName = json['employerName'];
     isImageUploaded = json['isImageUploaded'];
     Timestamp timestamp = json['createdAt'];
@@ -72,6 +75,7 @@ class Job {
     map['isImageUploaded'] = isImageUploaded;
     map['createdAt'] = createdAt;
     map['requirements'] = requirements;
+    map['employerId'] = employerId;
     // if (requirements != null) {
     //   map['requirements'] = requirements?.map((v) => v).toList();
     // }

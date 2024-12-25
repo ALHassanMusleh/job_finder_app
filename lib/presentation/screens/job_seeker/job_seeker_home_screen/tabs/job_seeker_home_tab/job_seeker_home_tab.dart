@@ -192,7 +192,7 @@ class CustomJobCardForJobSeeker extends StatelessWidget {
   const CustomJobCardForJobSeeker({
     super.key,
     required this.job,
-    this.isShow = false,
+    this.isShow = true,
   });
 
   final Job job;

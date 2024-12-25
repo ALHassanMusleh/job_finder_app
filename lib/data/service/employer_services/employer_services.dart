@@ -134,6 +134,7 @@ abstract class EmployerServices {
         requirements: requirements,
         createdAt: DateTime.now(),
         employerName: Employer.currentEmployer!.name,
+        employerId: Employer.currentEmployer!.id,
       );
       debugPrint('3');
 

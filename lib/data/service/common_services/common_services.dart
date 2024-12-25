@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -36,6 +37,7 @@ abstract class CommonServices {
     }
   }
 
+
   // upload image to supabase storage
   static Future<dynamic> uploadImageToSupabase({File? imageFile}) async {
     final supabaseStorage = Supabase.instance.client.storage.from('images');
@@ -50,5 +52,17 @@ abstract class CommonServices {
     // return imageUrl;
   }
 
+  // upload image to supabase storage
+  static Future<dynamic> uploadFileToSupabase({File? file}) async {
+    final supabaseStorage = Supabase.instance.client.storage.from('files');
+    final fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    final path = 'uploads/$fileName';
+    await supabaseStorage.upload(path, file!);
 
+    print('upload');
+    final fileUrl = supabaseStorage.getPublicUrl(path);
+    return fileUrl; // Return the file URL
+
+    // return imageUrl;
+  }
 }
