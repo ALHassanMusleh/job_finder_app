@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:job_finder_app/data/model/job.dart';
+import 'package:job_finder_app/data/provider/employer/jobs_provider.dart';
 import 'package:job_finder_app/data/service/common_services/common_services.dart';
 import 'package:job_finder_app/presentation/screens/employer/add_job_requirements_screen/add_job_requirement_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/apply_for_job_screen/apply_for_job_screen.dart';
@@ -10,6 +11,7 @@ import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_home_s
 import 'package:job_finder_app/utils/app_colors.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
 import 'package:job_finder_app/utils/widgets/custom_button.dart';
+import 'package:provider/provider.dart';
 
 class JobDetailsScreen extends StatefulWidget {
   const JobDetailsScreen({super.key});
@@ -22,9 +24,11 @@ class JobDetailsScreen extends StatefulWidget {
 class _JobDetailsScreenState extends State<JobDetailsScreen> {
   late Job job;
   File? file;
+  late SavedJobsProvider savedJobsProvider;
   @override
   Widget build(BuildContext context) {
     job = ModalRoute.of(context)!.settings.arguments as Job;
+    savedJobsProvider = Provider.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -150,7 +154,8 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                 Expanded(
                   flex: 2,
                   child: InkWell(
-                    onTap: ()  {
+                    onTap: () {
+                      savedJobsProvider.toggleWatchlist(job);
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8),
@@ -158,11 +163,15 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                         color: AppColors.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(
-                        Icons.bookmark_outline,
-                        color: AppColors.primary,
-                        size: 30,
-                      ),
+                      child: savedJobsProvider.moviesIsBooked(job)
+                          ? const Icon(
+                              Icons.bookmark,
+                              color: AppColors.primary,
+                            )
+                          : const Icon(
+                              Icons.bookmark_outline,
+                              color: AppColors.primary,
+                            ),
                     ),
                   ),
                 ),

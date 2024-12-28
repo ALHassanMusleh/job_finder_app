@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:job_finder_app/data/model/app_user.dart';
 import 'package:job_finder_app/data/model/employer.dart';
 import 'package:job_finder_app/data/model/job_seeker.dart';
+import 'package:job_finder_app/data/provider/employer/jobs_provider.dart';
 import 'package:job_finder_app/data/service/employer_services/employer_services.dart';
 import 'package:job_finder_app/data/service/job_seeker_services/job_seeker_services.dart';
 import 'package:job_finder_app/presentation/screens/common/Auth/login_screen/login_screen.dart';
@@ -19,6 +20,7 @@ import 'package:job_finder_app/presentation/screens/job_seeker/jobs_list_from_em
 import 'package:job_finder_app/utils/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:job_finder_app/utils/shared_pref_utils.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'firebase_options.dart';
 import 'presentation/screens/employer/employer_profile_screen/employer_profile_screen.dart';
@@ -46,8 +48,12 @@ void main() async {
           await EmployerServices.getEmployerFromFireStore(isFindUser.id!);
     }
   }
-  runApp(MyApp(
-    isFindUser: isFindUser,
+  runApp(ChangeNotifierProvider(
+    create: (_) => SavedJobsProvider(),
+
+    child: MyApp(
+      isFindUser: isFindUser,
+    ),
   ));
 }
 
@@ -70,7 +76,8 @@ class MyApp extends StatelessWidget {
             const EmployerProfileScreen(),
         JobSeekerProfileScreen.routeName: (context) =>
             const JobSeekerProfileScreen(),
-        JobSeekerHomeScreen.routeName: (context) => const JobSeekerHomeScreen(),
+        JobSeekerHomeScreen.routeName: (context) =>
+            const JobSeekerHomeScreen(),
         EmployerHomeScreen.routeName: (context) => const EmployerHomeScreen(),
         JobApplicationsScreen.routeName: (context) =>
             const JobApplicationsScreen(),

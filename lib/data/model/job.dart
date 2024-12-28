@@ -16,6 +16,7 @@ class Job {
   late String employerId;
 
   static const String collectionName = 'jobs';
+  static late List<Job>? savedJobsList;
 
   static CollectionReference get employerJobsCollection =>
       FirebaseFirestore.instance

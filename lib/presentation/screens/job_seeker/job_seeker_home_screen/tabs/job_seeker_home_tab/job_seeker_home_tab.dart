@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:job_finder_app/data/model/employer.dart';
 import 'package:job_finder_app/data/model/job.dart';
 import 'package:job_finder_app/data/model/job_seeker.dart';
+import 'package:job_finder_app/data/provider/employer/jobs_provider.dart';
 import 'package:job_finder_app/data/service/job_seeker_services/job_seeker_services.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/tabs/home_tab/home_tab.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/employer_list_screen/employer_list_screen.dart';
@@ -11,12 +12,15 @@ import 'package:job_finder_app/presentation/screens/job_seeker/job_details_scree
 import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_home_screen/tabs/job_seeker_saved_jobs_tab/job_seeker_saved_jobs_tab.dart';
 import 'package:job_finder_app/utils/app_colors.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
+import 'package:provider/provider.dart';
 
 class JobSeekerHomeTab extends StatelessWidget {
-  const JobSeekerHomeTab({super.key});
+   JobSeekerHomeTab({super.key});
+  late SavedJobsProvider savedJobsProvider;
 
   @override
   Widget build(BuildContext context) {
+    savedJobsProvider = Provider.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: SingleChildScrollView(
@@ -188,8 +192,8 @@ class JobSeekerHomeTab extends StatelessWidget {
   }
 }
 
-class CustomJobCardForJobSeeker extends StatelessWidget {
-  const CustomJobCardForJobSeeker({
+class CustomJobCardForJobSeeker extends StatefulWidget {
+  CustomJobCardForJobSeeker({
     super.key,
     required this.job,
     this.isShow = true,
@@ -199,13 +203,23 @@ class CustomJobCardForJobSeeker extends StatelessWidget {
   final bool isShow;
 
   @override
+  State<CustomJobCardForJobSeeker> createState() =>
+      _CustomJobCardForJobSeekerState();
+}
+
+class _CustomJobCardForJobSeekerState extends State<CustomJobCardForJobSeeker> {
+  late SavedJobsProvider savedJobsProvider;
+
+  @override
   Widget build(BuildContext context) {
+    savedJobsProvider = Provider.of(context);
+
     return InkWell(
       onTap: () {
         Navigator.pushNamed(
           context,
           JobDetailsScreen.routeName,
-          arguments: job,
+          arguments: widget.job,
         );
       },
       child: Container(
@@ -232,9 +246,9 @@ class CustomJobCardForJobSeeker extends StatelessWidget {
                 child: CircleAvatar(
                   backgroundColor: const Color(0xffF7F7FC),
                   radius: 70,
-                  child: job.isImageUploaded
+                  child: widget.job.isImageUploaded
                       ? CachedNetworkImage(
-                          imageUrl: job.image!,
+                          imageUrl: widget.job.image!,
                           placeholder: (context, url) => const Center(
                             child: CircularProgressIndicator(),
                           ),
@@ -257,19 +271,19 @@ class CustomJobCardForJobSeeker extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    job.title,
+                    widget.job.title,
                     maxLines: 1,
                     style: AppStyle.titlesJobTextStyle.copyWith(),
                   ),
                   Text(
-                    job.employerName,
+                    widget.job.employerName,
                     maxLines: 1,
                     style: AppStyle.labelStyle
                         .copyWith(color: const Color(0xff394452)),
                   ),
-                  isShow
+                  widget.isShow
                       ? Text(
-                          '${job.location} - ${job.type}',
+                          '${widget.job.location} - ${widget.job.type}',
                           maxLines: 1,
                           style: AppStyle.labelStyle,
                         )
@@ -280,7 +294,7 @@ class CustomJobCardForJobSeeker extends StatelessWidget {
             const SizedBox(
               width: 12,
             ),
-            isShow
+            widget.isShow
                 ? Expanded(
                     flex: 3,
                     child: Padding(
@@ -289,14 +303,21 @@ class CustomJobCardForJobSeeker extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           InkWell(
-                            onTap: () {},
-                            child: const Icon(
-                              Icons.bookmark_outline,
-                              color: AppColors.primary,
-                            ),
+                            onTap: () {
+                              savedJobsProvider.toggleWatchlist(widget.job);
+                            },
+                            child: savedJobsProvider.moviesIsBooked(widget.job)
+                                ? const Icon(
+                                    Icons.bookmark,
+                                    color: AppColors.primary,
+                                  )
+                                : const Icon(
+                                    Icons.bookmark_outline,
+                                    color: AppColors.primary,
+                                  ),
                           ),
                           Text(
-                            '\$${job.salary}',
+                            '\$${widget.job.salary}',
                             style: AppStyle.labelStyle.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.bold),
