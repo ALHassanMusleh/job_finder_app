@@ -58,7 +58,7 @@ class HomeTab extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: 5,
-          itemBuilder: (context, index) => const CustomJobAppliedAndDetails(),
+          itemBuilder: (context, index) => const CustomJobAppliedAndDetailsToEmployer(),
           separatorBuilder: (context, index) => const SizedBox(
             height: 10,
           ),
@@ -140,8 +140,8 @@ class HomeTab extends StatelessWidget {
   }
 }
 
-class CustomJobAppliedAndDetails extends StatelessWidget {
-  const CustomJobAppliedAndDetails({
+class CustomJobAppliedAndDetailsToEmployer extends StatelessWidget {
+  const CustomJobAppliedAndDetailsToEmployer({
     super.key,
   });
 
@@ -151,7 +151,7 @@ class CustomJobAppliedAndDetails extends StatelessWidget {
       decoration: AppStyle.containerDecoration,
       child: Column(
         children: [
-          const CustomJobAppliedCard(),
+          const CustomJobAppliedCardToEmployer(),
           const Divider(
             thickness: 1,
           ),
@@ -286,8 +286,8 @@ class CustomJobCard extends StatelessWidget {
   }
 }
 
-class CustomJobAppliedCard extends StatelessWidget {
-  const CustomJobAppliedCard({
+class CustomJobAppliedCardToEmployer extends StatelessWidget {
+  const CustomJobAppliedCardToEmployer({
     super.key,
   });
 

@@ -13,6 +13,7 @@ import 'package:job_finder_app/presentation/screens/employer/job_applications_sc
 import 'package:job_finder_app/presentation/screens/job_seeker/apply_for_job_screen/apply_for_job_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/employer_list_screen/employer_list_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/job_details_screen/job_details_screen.dart';
+import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_application_details_screen/job_seeker_application_details_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_home_screen/job_seeker_home_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/jobs_list_from_employer_screen/job_list_from_employer_screen.dart';
 import 'package:job_finder_app/utils/app_theme.dart';
@@ -80,6 +81,8 @@ class MyApp extends StatelessWidget {
             const JobListFromEmployerScreen(),
         JobDetailsScreen.routeName: (context) => const JobDetailsScreen(),
         ApplyForJobScreen.routeName: (context) => const ApplyForJobScreen(),
+        JobSeekerApplicationDetailsScreen.routeName: (context) =>
+            const JobSeekerApplicationDetailsScreen(),
       },
       initialRoute: isFindUser != null
           ? isFindUser!.isJobSeeker!

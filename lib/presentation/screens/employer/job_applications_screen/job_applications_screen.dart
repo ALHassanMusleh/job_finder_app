@@ -35,7 +35,7 @@ class JobApplicationsScreen extends StatelessWidget {
               child: ListView.separated(
                 itemCount: 5,
                 itemBuilder: (context, index) =>
-                    const CustomJobAppliedAndDetails(),
+                    const CustomJobAppliedAndDetailsToEmployer(),
                 separatorBuilder: (context, index) => const SizedBox(
                   height: 10,
                 ),
