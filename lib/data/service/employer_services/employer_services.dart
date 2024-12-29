@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:job_finder_app/data/model/app_user.dart';
+import 'package:job_finder_app/data/model/application.dart';
+import 'package:job_finder_app/data/model/application_job_result.dart';
 import 'package:job_finder_app/data/model/employer.dart';
 import 'package:job_finder_app/data/model/job.dart';
+import 'package:job_finder_app/data/model/job_seeker.dart';
 import 'package:job_finder_app/data/service/common_services/common_services.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/employer_home_screen.dart';
 import 'package:job_finder_app/utils/dialog_utils.dart';
@@ -256,6 +259,102 @@ abstract class EmployerServices {
           context,
           title: 'Success',
           body: 'Edited Succefully Profile',
+          posButtonTitle: 'ok',
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        hideDialog(context);
+        showMessage(context, title: e.toString());
+      }
+    }
+  }
+
+  static Future<ApplicationJobResult>? getApplicationsForJobInEmployer(
+      String jobId) async {
+    List<Application> applicationList = [];
+    List<JobSeeker> jobSeekerList = [];
+
+    // Fetch applications for the current job seeker
+    QuerySnapshot querySnapShot = await Application.applicationCollection
+        .where('jobId', isEqualTo: jobId)
+        .get();
+    List<QueryDocumentSnapshot> documents = querySnapShot.docs;
+    debugPrint('1');
+
+    applicationList = documents.map((doc) {
+      Map<String, dynamic> json = doc.data() as Map<String, dynamic>;
+      return Application.fromJson(json);
+    }).toList();
+    debugPrint('2');
+
+    print(applicationList);
+    // Fetch jobs for each application
+    for (var application in applicationList) {
+      if (application.jobSeekerId != null) {
+        JobSeeker? jobSeeker = await _getJobSeekerById(application.jobSeekerId);
+        if (jobSeeker != null) {
+          jobSeekerList.add(jobSeeker);
+        }
+      }
+    }
+    debugPrint('2');
+
+    return ApplicationJobResult(applicationList, jobSeeker: jobSeekerList);
+  }
+
+  static Future<JobSeeker?> _getJobSeekerById(String jobSeekerId) async {
+    try {
+      DocumentSnapshot jobSnapshot = await FirebaseFirestore.instance
+          .collection(JobSeeker.collectionName)
+          .doc(jobSeekerId)
+          .get();
+
+      debugPrint('job 1');
+
+      if (jobSnapshot.exists) {
+        Map<String, dynamic> jobSeekerData =
+            jobSnapshot.data() as Map<String, dynamic>;
+        debugPrint('job 2');
+
+        return JobSeeker.fromJson(jobSeekerData);
+      } else {
+        debugPrint("No job found with ID: $jobSeekerId");
+        return null;
+      }
+    } catch (e) {
+      debugPrint("Error fetching job: $e");
+      return null;
+    }
+  }
+
+  static Future<void> updateApplicationForJobSeekerInEmployer(
+    BuildContext context, {
+    required String employerId,
+    required String jobId,
+    required String applicationId,
+    required String status,
+    required String? employerMessage,
+  }) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(Employer.collectionName)
+          .doc(employerId)
+          .collection(Job.collectionName)
+          .doc(jobId)
+          .collection(Application.collectionName)
+          .doc(applicationId)
+          .update({
+        'status': status,
+        'employerMessage': employerMessage ?? '',
+      });
+
+      if (context.mounted) {
+        hideDialog(context);
+        showMessage(
+          context,
+          title: 'Success',
+          body: 'Application Status Changed',
           posButtonTitle: 'ok',
         );
       }

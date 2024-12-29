@@ -9,6 +9,7 @@ import 'package:job_finder_app/presentation/screens/common/Auth/login_screen/log
 import 'package:job_finder_app/presentation/screens/common/Auth/register_screen/register_screen.dart';
 import 'package:job_finder_app/presentation/screens/common/splash_screen/splash_screen.dart';
 import 'package:job_finder_app/presentation/screens/employer/add_job_requirements_screen/add_job_requirement_screen.dart';
+import 'package:job_finder_app/presentation/screens/employer/employer_application_details_screen/employer_application_details_screen.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/employer_home_screen.dart';
 import 'package:job_finder_app/presentation/screens/employer/job_applications_screen/job_applications_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/apply_for_job_screen/apply_for_job_screen.dart';
@@ -50,7 +51,6 @@ void main() async {
   }
   runApp(ChangeNotifierProvider(
     create: (_) => SavedJobsProvider(),
-
     child: MyApp(
       isFindUser: isFindUser,
     ),
@@ -76,11 +76,9 @@ class MyApp extends StatelessWidget {
             const EmployerProfileScreen(),
         JobSeekerProfileScreen.routeName: (context) =>
             const JobSeekerProfileScreen(),
-        JobSeekerHomeScreen.routeName: (context) =>
-            const JobSeekerHomeScreen(),
+        JobSeekerHomeScreen.routeName: (context) => const JobSeekerHomeScreen(),
         EmployerHomeScreen.routeName: (context) => const EmployerHomeScreen(),
-        JobApplicationsScreen.routeName: (context) =>
-            const JobApplicationsScreen(),
+        JobApplicationsScreen.routeName: (context) => JobApplicationsScreen(),
         AddJobRequirementScreen.routeName: (context) =>
             const AddJobRequirementScreen(),
         EmployerListScreen.routeName: (context) => const EmployerListScreen(),
@@ -90,6 +88,8 @@ class MyApp extends StatelessWidget {
         ApplyForJobScreen.routeName: (context) => const ApplyForJobScreen(),
         JobSeekerApplicationDetailsScreen.routeName: (context) =>
             const JobSeekerApplicationDetailsScreen(),
+        EmployerApplicationDetailsScreen.routeName: (context) =>
+            const EmployerApplicationDetailsScreen(),
       },
       initialRoute: isFindUser != null
           ? isFindUser!.isJobSeeker!

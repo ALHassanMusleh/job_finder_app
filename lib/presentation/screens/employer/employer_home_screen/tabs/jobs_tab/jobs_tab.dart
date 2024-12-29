@@ -44,6 +44,7 @@ class JobsTab extends StatelessWidget {
                         Navigator.pushNamed(
                           context,
                           JobApplicationsScreen.routeName,
+                          arguments: snapshot.data![index],
                         );
                       },
                       child: CustomJobCard(

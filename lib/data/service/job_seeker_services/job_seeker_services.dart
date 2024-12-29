@@ -357,13 +357,18 @@ abstract class JobSeekerServices {
     }
     debugPrint('2');
 
+    // print(applicationList);
+    // print(jobList);
+    //
+    // print(ApplicationJobResult(
+    //   applicationList,
+    //   job: jobList,
+    // ));
 
-    print(applicationList);
-    print(jobList);
-
-    print(ApplicationJobResult(applicationList, jobList));
-
-    return ApplicationJobResult(applicationList, jobList);
+    return ApplicationJobResult(
+      applicationList,
+      job: jobList,
+    );
   }
 
   static Future<Job?> _getJobById(String jobId, String employerId) async {
@@ -377,20 +382,18 @@ abstract class JobSeekerServices {
 
       debugPrint('job 1');
 
-
       if (jobSnapshot.exists) {
         Map<String, dynamic> jobData =
             jobSnapshot.data() as Map<String, dynamic>;
         debugPrint('job 2');
 
         return Job.fromJson(jobData);
-
       } else {
-        print("No job found with ID: $jobId");
+        debugPrint("No job found with ID: $jobId");
         return null;
       }
     } catch (e) {
-      print("Error fetching job: $e");
+      debugPrint("Error fetching job: $e");
       return null;
     }
   }

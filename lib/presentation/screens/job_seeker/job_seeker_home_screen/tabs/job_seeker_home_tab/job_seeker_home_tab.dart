@@ -6,16 +6,14 @@ import 'package:job_finder_app/data/model/job.dart';
 import 'package:job_finder_app/data/model/job_seeker.dart';
 import 'package:job_finder_app/data/provider/employer/jobs_provider.dart';
 import 'package:job_finder_app/data/service/job_seeker_services/job_seeker_services.dart';
-import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/tabs/home_tab/home_tab.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/employer_list_screen/employer_list_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/job_details_screen/job_details_screen.dart';
-import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_home_screen/tabs/job_seeker_saved_jobs_tab/job_seeker_saved_jobs_tab.dart';
 import 'package:job_finder_app/utils/app_colors.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
 import 'package:provider/provider.dart';
 
 class JobSeekerHomeTab extends StatelessWidget {
-   JobSeekerHomeTab({super.key});
+  JobSeekerHomeTab({super.key});
   late SavedJobsProvider savedJobsProvider;
 
   @override

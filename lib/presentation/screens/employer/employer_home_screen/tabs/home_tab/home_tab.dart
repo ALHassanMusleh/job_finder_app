@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:job_finder_app/data/model/application.dart';
 import 'package:job_finder_app/data/model/employer.dart';
 import 'package:job_finder_app/data/model/job.dart';
+import 'package:job_finder_app/data/model/job_seeker.dart';
 import 'package:job_finder_app/data/service/employer_services/employer_services.dart';
+import 'package:job_finder_app/presentation/screens/employer/employer_application_details_screen/employer_application_details_screen.dart';
 import 'package:job_finder_app/presentation/screens/employer/job_applications_screen/job_applications_screen.dart';
 import 'package:job_finder_app/utils/app_colors.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
@@ -36,36 +39,37 @@ class HomeTab extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            buildRecentPeopleApplied(),
+            // buildRecentPeopleApplied(),
           ],
         ),
       ),
     );
   }
 
-  Column buildRecentPeopleApplied() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Recent people Applied',
-          style: AppStyle.titlesTextStyle,
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        ListView.separated(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: 5,
-          itemBuilder: (context, index) => const CustomJobAppliedAndDetailsToEmployer(),
-          separatorBuilder: (context, index) => const SizedBox(
-            height: 10,
-          ),
-        ),
-      ],
-    );
-  }
+  // Column buildRecentPeopleApplied() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       const Text(
+  //         'Recent people Applied',
+  //         style: AppStyle.titlesTextStyle,
+  //       ),
+  //       const SizedBox(
+  //         height: 20,
+  //       ),
+  //       ListView.separated(
+  //         physics: const NeverScrollableScrollPhysics(),
+  //         shrinkWrap: true,
+  //         itemCount: 5,
+  //         itemBuilder: (context, index) =>
+  //             const CustomJobAppliedAndDetailsToEmployer(),
+  //         separatorBuilder: (context, index) => const SizedBox(
+  //           height: 10,
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Column buildLatestJob() {
     return Column(
@@ -143,7 +147,14 @@ class HomeTab extends StatelessWidget {
 class CustomJobAppliedAndDetailsToEmployer extends StatelessWidget {
   const CustomJobAppliedAndDetailsToEmployer({
     super.key,
+    required this.job,
+    required this.jobSeeker,
+    required this.application,
   });
+
+  final Job job;
+  final JobSeeker jobSeeker;
+  final Application application;
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +162,10 @@ class CustomJobAppliedAndDetailsToEmployer extends StatelessWidget {
       decoration: AppStyle.containerDecoration,
       child: Column(
         children: [
-          const CustomJobAppliedCardToEmployer(),
+          CustomJobAppliedCardToEmployer(
+            job: job,
+            jobSeeker: jobSeeker,
+          ),
           const Divider(
             thickness: 1,
           ),
@@ -162,7 +176,13 @@ class CustomJobAppliedAndDetailsToEmployer extends StatelessWidget {
                 Expanded(
                   child: CustomButton(
                     title: 'See Details',
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        EmployerApplicationDetailsScreen.routeName,
+                        arguments: [application, jobSeeker, job],
+                      );
+                    },
                   ),
                 ),
               ],
@@ -289,7 +309,12 @@ class CustomJobCard extends StatelessWidget {
 class CustomJobAppliedCardToEmployer extends StatelessWidget {
   const CustomJobAppliedCardToEmployer({
     super.key,
+    required this.jobSeeker,
+    required this.job,
   });
+
+  final JobSeeker jobSeeker;
+  final Job job;
 
   @override
   Widget build(BuildContext context) {
@@ -312,11 +337,18 @@ class CustomJobAppliedCardToEmployer extends StatelessWidget {
                   width: 1,
                 ),
               ),
-              child: Image.asset(
-                'assets/images/Icon.png',
-                height: 60,
-                width: 60,
-              ),
+              child: jobSeeker.isImageUploaded
+                  ? CachedNetworkImage(
+                      imageUrl: jobSeeker.image,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                      width: MediaQuery.of(context).size.width * .31,
+                      height: MediaQuery.of(context).size.height * .22,
+                    )
+                  : Image.asset('assets/images/Icon.png'),
             ),
           ),
           const SizedBox(
@@ -329,13 +361,13 @@ class CustomJobAppliedCardToEmployer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Hassan mu',
+                  jobSeeker.name,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: AppStyle.titlesJobTextStyle.copyWith(),
                 ),
                 Text(
-                  'Ui / ux designer',
+                  job.title,
                   maxLines: 1,
                   style: AppStyle.labelStyle
                       .copyWith(color: const Color(0xff394452)),
