@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:job_finder_app/data/model/job_seeker.dart';
-import 'package:job_finder_app/data/provider/employer/jobs_provider.dart';
-import 'package:job_finder_app/data/service/auth/auth_services.dart';
-import 'package:job_finder_app/data/service/job_seeker_services/job_seeker_services.dart';
 import 'package:job_finder_app/presentation/screens/common/Auth/login_screen/login_screen.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_home_screen/tabs/job_seeker_applications_tab/job_seeker_applicatios_tab.dart';
 import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_home_screen/tabs/job_seeker_chats_tab/job_seeker_chats_tab.dart';
@@ -13,7 +10,6 @@ import 'package:job_finder_app/presentation/screens/job_seeker/job_seeker_home_s
 import 'package:job_finder_app/utils/app_colors.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
 import 'package:job_finder_app/utils/shared_pref_utils.dart';
-import 'package:provider/provider.dart';
 
 class JobSeekerHomeScreen extends StatefulWidget {
   const JobSeekerHomeScreen({super.key});
@@ -57,7 +53,7 @@ class _JobSeekerHomeScreenState extends State<JobSeekerHomeScreen> {
               JobSeeker.currentJobSeeker = null;
               Navigator.pushReplacementNamed(context, LoginScreen.routeName);
             },
-            icon: const Icon(Iconsax.setting),
+            icon: const Icon(Iconsax.logout),
             color: AppColors.black,
           ),
         ],

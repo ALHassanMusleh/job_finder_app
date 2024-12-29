@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:job_finder_app/data/model/application.dart';
 import 'package:job_finder_app/data/model/job.dart';
 import 'package:job_finder_app/data/model/job_seeker.dart';
-import 'package:job_finder_app/data/service/common_services/common_services.dart';
 import 'package:job_finder_app/data/service/employer_services/employer_services.dart';
 import 'package:job_finder_app/presentation/screens/employer/employer_home_screen/tabs/home_tab/home_tab.dart';
 import 'package:job_finder_app/presentation/screens/employer/pdf_view_screen/pdf_view_screen.dart';
@@ -13,7 +12,6 @@ import 'package:job_finder_app/utils/app_colors.dart';
 import 'package:job_finder_app/utils/app_styles.dart';
 import 'package:job_finder_app/utils/widgets/custom_button.dart';
 import 'package:job_finder_app/utils/widgets/custom_text_field.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
 
@@ -44,13 +42,22 @@ class _EmployerApplicationDetailsScreenState
   TextEditingController messageController = TextEditingController();
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      /// This block is called after build it is only called only once
+      valueSelected = application.status;
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     arg = ModalRoute.of(context)!.settings.arguments as List<dynamic>;
 
     application = arg[0] as Application;
     jobSeeker = arg[1] as JobSeeker;
     job = arg[2] as Job;
-    valueSelected = application.status;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -155,7 +162,7 @@ class _EmployerApplicationDetailsScreenState
                       child: DropdownButton(
                         // value: selectedLanguage,
                         // value: provider.locale,
-                        value: valueSelected ?? status[0],
+                        value: valueSelected,
                         onChanged: (value) {
                           valueSelected = value;
                           setState(() {});

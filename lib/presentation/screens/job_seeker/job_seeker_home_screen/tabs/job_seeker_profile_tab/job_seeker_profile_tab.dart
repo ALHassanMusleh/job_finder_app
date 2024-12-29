@@ -49,7 +49,7 @@ class _JobSeekerProfileTabState extends State<JobSeekerProfileTab> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'Profile Employers!',
+                  'Profile Job Seeker!',
                   style: AppStyle.titlesTextStyle,
                 ),
                 const SizedBox(height: 15),
@@ -153,7 +153,9 @@ class _JobSeekerProfileTabState extends State<JobSeekerProfileTab> {
                         occupationController: occupationController,
                         addressController: addressController,
                         formKey: formKey,
-                        selectedDate: selectedDate);
+                        selectedDate: selectedDate,
+                      imageFile: imageFile,
+                    );
                   },
                 ),
                 const SizedBox(height: 20),

@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
+      // darkTheme: AppTheme.dark,
       routes: {
         SplashScreen.routeName: (context) => const SplashScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),

@@ -23,19 +23,33 @@ class PickImageWidget extends StatelessWidget {
           CircleAvatar(
             backgroundColor: const Color(0xffF7F7FC),
             radius: 70,
-            child: isImageUploaded
-                ? CachedNetworkImage(
-                    imageUrl: imagePath!,
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                    width: MediaQuery.of(context).size.width * .31,
-                    height: MediaQuery.of(context).size.height * .22,
-                  )
-                : imageFile != null
-                    ? Image.file(imageFile!)
+            child: imageFile != null
+                ? Image.file(imageFile!)
+                : isImageUploaded
+                    ? CachedNetworkImage(
+                        imageUrl: imagePath!,
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                        width: MediaQuery.of(context).size.width * .31,
+                        height: MediaQuery.of(context).size.height * .22,
+                      )
                     : Image.asset('assets/images/Icon.png'),
+
+            // child: isImageUploaded
+            //     ? CachedNetworkImage(
+            //         imageUrl: imagePath!,
+            //         placeholder: (context, url) => const Center(
+            //           child: CircularProgressIndicator(),
+            //         ),
+            //         errorWidget: (context, url, error) => Icon(Icons.error),
+            //         width: MediaQuery.of(context).size.width * .31,
+            //         height: MediaQuery.of(context).size.height * .22,
+            //       )
+            //     : imageFile != null
+            //         ? Image.file(imageFile!)
+            //         : Image.asset('assets/images/Icon.png'),
           ),
           Positioned(
             bottom: 0,

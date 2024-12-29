@@ -51,7 +51,7 @@ class _EmployerHomeScreenState extends State<EmployerHomeScreen> {
               Employer.currentEmployer = null;
               Navigator.pushReplacementNamed(context, LoginScreen.routeName);
             },
-            icon: const Icon(Iconsax.setting),
+            icon: const Icon(Iconsax.logout),
             color: AppColors.black,
           ),
         ],
